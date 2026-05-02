@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест по Корану — Джуз ‘Амма</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-card: #fdfaf2;
+  --paper: #fbf6e9;
+  --ink: #2a3a2a;
+  --ink-soft: #5a6a5a;
+  --accent: #5a7a4f;
+  --accent-dark: #3d5a36;
+  --accent-light: #c5d4ba;
+  --gold: #b08a4a;
+  --gold-light: #e6d4a8;
+  --red: #a63d3d;
+  --red-light: #f0d8d8;
+  --green: #4a8a4a;
+  --green-light: #d1e7c8;
+  --amber: #c9892b;
+  --amber-light: #f5e0b8;
+  --border: #d4cab4;
+  --shadow: 0 4px 20px rgba(80, 60, 30, 0.08);
+  --shadow-lg: 0 12px 40px rgba(80, 60, 30, 0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(at 20% 0%, rgba(176, 138, 74, 0.06) 0%, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(90, 122, 79, 0.08) 0%, transparent 50%);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 24px 16px;
+  line-height: 1.5;
+}
+
+.container { max-width: 880px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 32px 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+header .ornament {
+  font-family: 'Amiri', serif;
+  font-size: 28px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  letter-spacing: 4px;
+}
+
+header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(28px, 5vw, 42px);
+  color: var(--accent-dark);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+header .subtitle {
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.4s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card h2::before {
+  content: '';
+  width: 4px;
+  height: 22px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+.filter-group { margin-bottom: 22px; }
+.filter-group:last-child { margin-bottom: 0; }
+
+.filter-group > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.preset-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.preset-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.suras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.sura-chip {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12.5px;
+  transition: all 0.15s;
+  background: white;
+}
+
+.sura-chip:hover { background: var(--accent-light); }
+.sura-chip input { margin-right: 8px; accent-color: var(--accent); }
+
+.sura-chip .sura-num {
+  font-weight: 700;
+  color: var(--gold);
+  margin-right: 6px;
+  min-width: 22px;
+}
+
+.sura-chip .sura-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+}
+
+.toggle input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+.mode-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mode-card {
+  padding: 14px;
+  border: 2px solid var(--border);
+  background: var(--paper);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.mode-card:hover { border-color: var(--accent); }
+
+.mode-card.active {
+  border-color: var(--accent-dark);
+  background: var(--accent-light);
+}
+
+.mode-card .mode-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 4px;
+}
+
+.mode-card .mode-desc {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.start-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 14px rgba(61, 90, 54, 0.25);
+  margin-top: 8px;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(61, 90, 54, 0.35);
+}
+
+.start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--paper);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.stat-row strong { color: var(--accent-dark); font-size: 15px; }
+
+.progress-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.progress-info .score { color: var(--accent-dark); font-weight: 700; font-size: 14px; }
+
+.progress-bar {
+  height: 6px;
+  background: var(--paper);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--accent) 100%);
+  width: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 3px;
+}
+
+.ayah-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 36px 28px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.ayah-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+}
+
+.ayah-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.ayah-meta-left {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.ayah-meta-left .num { color: var(--gold); }
+
+.ayah-meta-right {
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.arabic-text {
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-size: clamp(36px, 6.5vw, 52px);
+  line-height: 2.4;
+  text-align: center;
+  color: var(--ink);
+  direction: rtl;
+  padding: 24px 8px;
+  margin-bottom: 20px;
+  word-spacing: 6px;
+}
+
+.russian-prompt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 3vw, 26px);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ink);
+  padding: 24px 16px;
+  margin-bottom: 20px;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.audio-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.audio-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--bg-card);
+  color: var(--gold);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.audio-btn:hover {
+  background: var(--gold);
+  color: white;
+  transform: scale(1.05);
+}
+
+.audio-btn.play { width: 52px; height: 52px; font-size: 22px; }
+.audio-btn.playing { background: var(--gold); color: white; }
+
+.audio-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+  border-color: var(--border);
+}
+
+.speed-group {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.speed-btn {
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: all 0.15s;
+}
+
+.speed-btn:hover { color: var(--accent-dark); }
+.speed-btn.active { background: var(--accent); color: white; }
+
+.audio-status {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  min-width: 80px;
+  text-align: center;
+}
+
+.reciter-note {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.hint-section { margin-bottom: 24px; }
+
+.hint-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px dashed var(--gold);
+  color: var(--gold);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.hint-toggle:hover {
+  background: var(--gold-light);
+  border-style: solid;
+}
+
+.hint-toggle::before { content: '💡'; }
+
+.hint-content {
+  margin-top: 14px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--gold-light) 0%, #f5ead0 100%);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.hint-content.visible { display: block; }
+.hint-content.arabic-hint {
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-size: 32px;
+  text-align: center;
+  direction: rtl;
+  line-height: 2;
+  font-style: normal;
+}
+
+.question {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+.answer-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.answer-btn {
+  padding: 16px 12px;
+  border: 2px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.answer-btn .icon { font-size: 22px; }
+.answer-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.answer-btn[data-answer="yes"]:hover { border-color: var(--green); background: var(--green-light); }
+.answer-btn[data-answer="partial"]:hover { border-color: var(--amber); background: var(--amber-light); }
+.answer-btn[data-answer="no"]:hover { border-color: var(--red); background: var(--red-light); }
+.answer-btn.flash-yes { background: var(--green-light); border-color: var(--green); animation: flash 0.5s; }
+.answer-btn.flash-partial { background: var(--amber-light); border-color: var(--amber); animation: flash 0.5s; }
+.answer-btn.flash-no { background: var(--red-light); border-color: var(--red); animation: flash 0.5s; }
+
+@keyframes flash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.nav-btn {
+  padding: 10px 18px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.results-card {
+  text-align: center;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 40px 28px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.results-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+}
+
+.results-ornament {
+  font-family: 'Amiri', serif;
+  font-size: 32px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.results-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 24px;
+}
+
+.score-circle {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.score-circle svg { transform: rotate(-90deg); }
+.score-circle .bg { stroke: var(--paper); }
+
+.score-circle .fill {
+  stroke: url(#scoreGrad);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.score-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-text .pct {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  line-height: 1;
+}
+
+.score-text .pct-label {
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.results-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-box {
+  padding: 16px 8px;
+  background: var(--paper);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.stat-box .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-box.yes .num { color: var(--green); }
+.stat-box.partial .num { color: var(--amber); }
+.stat-box.no .num { color: var(--red); }
+
+.stat-box .label {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.action-btn.primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: white;
+  border-color: var(--accent-dark);
+}
+
+.action-btn.warn {
+  background: linear-gradient(135deg, var(--amber) 0%, #a87422 100%);
+  color: white;
+  border-color: #a87422;
+}
+
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.review-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  border-left: 4px solid;
+}
+
+.review-item.yes { border-left-color: var(--green); }
+.review-item.partial { border-left-color: var(--amber); }
+.review-item.no { border-left-color: var(--red); }
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.review-badge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.review-badge.yes { background: var(--green-light); color: var(--green); }
+.review-badge.partial { background: var(--amber-light); color: var(--amber); }
+.review-badge.no { background: var(--red-light); color: var(--red); }
+
+.review-arabic {
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-size: 28px;
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+
+.review-russian {
+  font-size: 15px;
+  color: var(--ink);
+  font-style: italic;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover { border-color: var(--accent); color: var(--accent-dark); }
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 600px) {
+  .ayah-card { padding: 24px 18px; }
+  .answer-btn { padding: 12px 6px; font-size: 13px; }
+  .answer-btn .icon { font-size: 18px; }
+  .results-stats { grid-template-columns: 1fr; }
+  .mode-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="ornament">۞ ۩ ۞</div>
+  <h1>Тест по Корану</h1>
+  <div class="subtitle">Джуз ‘Амма · Самопроверка</div>
+</header>
+
+<section id="setup" class="screen active">
+
+  <div class="card">
+    <h2>Режим теста</h2>
+    <div class="mode-row">
+      <div class="mode-card active" data-mode="ar-to-ru">
+        <div class="mode-title">Арабский → Русский</div>
+        <div class="mode-desc">Видите арабский, проверяете знание перевода</div>
+      </div>
+      <div class="mode-card" data-mode="ru-to-ar">
+        <div class="mode-title">Русский → Арабский</div>
+        <div class="mode-desc">Видите русский, нужно вспомнить арабский</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Что повторяем</h2>
+
+    <div class="filter-group">
+      <label>Быстрый выбор</label>
+      <div class="preset-row">
+        <button class="preset-btn" data-preset="all">Все суры (78–114)</button>
+        <button class="preset-btn" data-preset="before-ala">До «аль-Аля» (78–86)</button>
+        <button class="preset-btn" data-preset="ala-to-zalzala">С «аль-Аля» до «аз-Залзала» (87–98)</button>
+        <button class="preset-btn" data-preset="last-suras">Последние суры (99–114)</button>
+        <button class="preset-btn" data-preset="none">Очистить</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>Или выберите вручную</label>
+      <div class="suras-grid" id="surasGrid"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Настройки</h2>
+    <div class="toggle-row">
+      <label class="toggle">
+        <input type="checkbox" id="optShuffle">
+        Перемешать аяты
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="optHideMeta">
+        Скрыть номер суры/аята
+      </label>
+    </div>
+    <div class="stat-row">
+      <span>Выбрано аятов:</span>
+      <strong id="selectedCount">0</strong>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn" disabled>Начать тест</button>
+</section>
+
+<section id="quiz" class="screen">
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span><span id="qCurrent">0</span> / <span id="qTotal">0</span></span>
+      <span class="score">Балл: <span id="qScore">0</span></span>
+      <span><span id="qPct">0</span>%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="ayah-card">
+    <div class="ayah-meta">
+      <div class="ayah-meta-left" id="ayahMetaLeft">
+        Сура <span class="num" id="qSura">—</span>, аят <span class="num" id="qAyah">—</span>
+      </div>
+      <div class="ayah-meta-right" id="ayahMetaRight">—</div>
+    </div>
+
+    <div class="arabic-text" id="qArabic" style="display:none;"></div>
+    <div class="russian-prompt" id="qRussian" style="display:none;"></div>
+
+    <div class="audio-bar" id="audioBar">
+      <button class="audio-btn" id="audioReplay" title="Прослушать заново">↺</button>
+      <button class="audio-btn play" id="audioPlay" title="Воспроизвести">▶</button>
+      <div class="speed-group" title="Скорость воспроизведения">
+        <button class="speed-btn" data-speed="0.5">0.5×</button>
+        <button class="speed-btn" data-speed="0.75">0.75×</button>
+        <button class="speed-btn active" data-speed="1">1×</button>
+      </div>
+      <div class="audio-status" id="audioStatus">Готово</div>
+    </div>
+    <div class="reciter-note">Чтец: Али аль-Худайфи (everyayah.com)</div>
+
+    <div class="hint-section">
+      <button class="hint-toggle" id="hintBtn">Показать подсказку</button>
+      <div class="hint-content" id="hintContent"></div>
+    </div>
+
+    <div class="question" id="questionText">Знаете ли вы перевод этого аята?</div>
+
+    <div class="answer-buttons">
+      <button class="answer-btn" data-answer="yes">
+        <span class="icon">✓</span>
+        <span>Да</span>
+      </button>
+      <button class="answer-btn" data-answer="partial">
+        <span class="icon">≈</span>
+        <span>Частично</span>
+      </button>
+      <button class="answer-btn" data-answer="no">
+        <span class="icon">✗</span>
+        <span>Нет</span>
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn" id="prevBtn">← Назад</button>
+      <button class="nav-btn" id="exitBtn">Выйти</button>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="screen">
+  <div class="results-card">
+    <div class="results-ornament">۞</div>
+    <h2>Тест завершён</h2>
+
+    <div class="score-circle">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <defs>
+          <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#b08a4a"/>
+            <stop offset="100%" stop-color="#5a7a4f"/>
+          </linearGradient>
+        </defs>
+        <circle class="bg" cx="80" cy="80" r="68" fill="none" stroke-width="10"/>
+        <circle class="fill" id="scoreFill" cx="80" cy="80" r="68" fill="none" stroke-width="10"
+                stroke-dasharray="427" stroke-dashoffset="427"/>
+      </svg>
+      <div class="score-text">
+        <div class="pct"><span id="rPct">0</span>%</div>
+        <div class="pct-label">Уверенно</div>
+      </div>
+    </div>
+
+    <div class="results-stats">
+      <div class="stat-box yes">
+        <div class="num" id="rYes">0</div>
+        <div class="label">Знаю</div>
+      </div>
+      <div class="stat-box partial">
+        <div class="num" id="rPartial">0</div>
+        <div class="label">Частично</div>
+      </div>
+      <div class="stat-box no">
+        <div class="num" id="rNo">0</div>
+        <div class="label">Не знаю</div>
+      </div>
+    </div>
+
+    <div class="stat-row" style="margin-bottom:18px;">
+      <span>Балл:</span>
+      <strong><span id="rScore">0</span> из <span id="rMax">0</span></strong>
+    </div>
+
+    <div class="results-actions">
+      <button class="action-btn" id="reviewBtn">Просмотреть ошибки</button>
+      <button class="action-btn warn" id="retryWrongBtn">Повторить неверные</button>
+      <button class="action-btn primary" id="restartBtn">Новый тест</button>
+    </div>
+  </div>
+</section>
+
+<section id="review" class="screen">
+  <button class="back-btn" id="reviewBack">← К результатам</button>
+  <div class="card">
+    <h2>Разбор ответов</h2>
+    <div class="preset-row" id="reviewFilters">
+      <button class="preset-btn active" data-filter="wrong">Неверные и частичные</button>
+      <button class="preset-btn" data-filter="all">Все</button>
+      <button class="preset-btn" data-filter="no">Только «не знаю»</button>
+      <button class="preset-btn" data-filter="partial">Только «частично»</button>
+      <button class="preset-btn" data-filter="yes">Только «знаю»</button>
+    </div>
+    <div class="review-list" id="reviewList"></div>
+  </div>
+</section>
+
+</div>
+
+<audio id="audioPlayer" preload="none"></audio>
+
+<script>
+const DATA = {"ayahs":[{"sura":78,"ayah":1,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"عَمَّ يَتَسَآءَلُونَ","ru":"О чем они расспрашивают друг друга?"},{"sura":78,"ayah":2,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"عَنِ ٱلنَّبَإِ ٱلْعَظِيمِ","ru":"О великой вести,"},{"sura":78,"ayah":3,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"ٱلَّذِى هُمْ فِيهِ مُخْتَلِفُونَ","ru":"относительно которой они расходятся во мнениях."},{"sura":78,"ayah":4,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"كَلَّا سَيَعْلَمُونَ","ru":"Но нет, они узнают!"},{"sura":78,"ayah":5,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"ثُمَّ كَلَّا سَيَعْلَمُونَ","ru":"Еще раз нет, они узнают!"},{"sura":78,"ayah":6,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"أَلَمْ نَجْعَلِ ٱلْأَرْضَ مِهَـٰدًا","ru":"Разве Мы не сделали землю ложем,"},{"sura":78,"ayah":7,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَٱلْجِبَالَ أَوْتَادًا","ru":"а горы – колышками?"},{"sura":78,"ayah":8,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَخَلَقْنَـٰكُمْ أَزْوَٰجًا","ru":"Мы сотворили вас парами,"},{"sura":78,"ayah":9,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا","ru":"и сделали ваш сон отдыхом,"},{"sura":78,"ayah":10,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَجَعَلْنَا ٱلَّيْلَ لِبَاسًا","ru":"и сделали ночь покрывалом,"},{"sura":78,"ayah":11,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَجَعَلْنَا ٱلنَّهَارَ مَعَاشًا","ru":"и сделали день жалованием,"},{"sura":78,"ayah":12,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا","ru":"и воздвигли над вами семь твердынь,"},{"sura":78,"ayah":13,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَجَعَلْنَا سِرَاجًا وَهَّاجًا","ru":"и установили пылающий светильник,"},{"sura":78,"ayah":14,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَأَنزَلْنَا مِنَ ٱلْمُعْصِرَٰتِ مَآءً ثَجَّاجًا","ru":"и низвели из облаков обильно льющуюся воду,"},{"sura":78,"ayah":15,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"لِّنُخْرِجَ بِهِۦ حَبًّا وَنَبَاتًا","ru":"чтобы взрастить ею зерна и растения"},{"sura":78,"ayah":16,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَجَنَّـٰتٍ أَلْفَافًا","ru":"и густые сады."},{"sura":78,"ayah":17,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِنَّ يَوْمَ ٱلْفَصْلِ كَانَ مِيقَـٰتًا","ru":"Воистину, День различения назначен на определенное время."},{"sura":78,"ayah":18,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"يَوْمَ يُنفَخُ فِى ٱلصُّورِ فَتَأْتُونَ أَفْوَاجًا","ru":"В тот день затрубят в Рог, и вы придете толпами,"},{"sura":78,"ayah":19,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتْ أَبْوَٰبًا","ru":"и небо раскроется и станет вратами,"},{"sura":78,"ayah":20,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَسُيِّرَتِ ٱلْجِبَالُ فَكَانَتْ سَرَابًا","ru":"и горы придут в движение и станут маревом."},{"sura":78,"ayah":21,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا","ru":"Воистину, Геенна является засадой"},{"sura":78,"ayah":22,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"لِّلطَّـٰغِينَ مَـَٔابًا","ru":"и местом возвращения для тех, кто преступает границы дозволенного."},{"sura":78,"ayah":23,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"لَّـٰبِثِينَ فِيهَآ أَحْقَابًا","ru":"Они пробудут там долгие годы,"},{"sura":78,"ayah":24,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا","ru":"не вкушая ни прохлады, ни питья,"},{"sura":78,"ayah":25,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِلَّا حَمِيمًا وَغَسَّاقًا","ru":"а только кипяток и гной."},{"sura":78,"ayah":26,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"جَزَآءً وِفَاقًا","ru":"Это будет подобающим возмездием."},{"sura":78,"ayah":27,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِنَّهُمْ كَانُوا۟ لَا يَرْجُونَ حِسَابًا","ru":"Воистину, они не ожидали расчета"},{"sura":78,"ayah":28,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَكَذَّبُوا۟ بِـَٔايَـٰتِنَا كِذَّابًا","ru":"и полностью отрицали Наши знамения."},{"sura":78,"ayah":29,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَكُلَّ شَىْءٍ أَحْصَيْنَـٰهُ كِتَـٰبًا","ru":"Мы же всякую вещь подсчитали и записали."},{"sura":78,"ayah":30,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"فَذُوقُوا۟ فَلَن نَّزِيدَكُمْ إِلَّا عَذَابًا","ru":"Вкушайте же! Мы не прибавим вам ничего, кроме мучений."},{"sura":78,"ayah":31,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِنَّ لِلْمُتَّقِينَ مَفَازًا","ru":"Воистину, богобоязненных ожидает успех,"},{"sura":78,"ayah":32,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"حَدَآئِقَ وَأَعْنَـٰبًا","ru":"Райские сады и виноградники,"},{"sura":78,"ayah":33,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَكَوَاعِبَ أَتْرَابًا","ru":"и полногрудые сверстницы,"},{"sura":78,"ayah":34,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"وَكَأْسًا دِهَاقًا","ru":"и полные чаши."},{"sura":78,"ayah":35,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّٰبًا","ru":"Они не услышат там ни пустословия, ни лжи."},{"sura":78,"ayah":36,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"جَزَآءً مِّن رَّبِّكَ عَطَآءً حِسَابًا","ru":"Это будет воздаянием и исчисленным даром от твоего Господа,"},{"sura":78,"ayah":37,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"رَّبِّ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَمَا بَيْنَهُمَا ٱلرَّحْمَـٰنِ ۖ لَا يَمْلِكُونَ مِنْهُ خِطَابًا","ru":"Господа небес и земли и того, что между ними, Милостивого, с Которым они не посмеют даже заговорить."},{"sura":78,"ayah":38,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"يَوْمَ يَقُومُ ٱلرُّوحُ وَٱلْمَلَـٰٓئِكَةُ صَفًّا ۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنْ أَذِنَ لَهُ ٱلرَّحْمَـٰنُ وَقَالَ صَوَابًا","ru":"В тот день, когда Дух (Джибриль) и ангелы станут рядами, не будет говорить никто, кроме тех, кому позволит Милостивый, и говорить они будут правду."},{"sura":78,"ayah":39,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"ذَٰلِكَ ٱلْيَوْمُ ٱلْحَقُّ ۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ مَـَٔابًا","ru":"Это будет истинный день, и всякий, кто пожелает, найдет способ вернуться к своему Господу."},{"sura":78,"ayah":40,"sura_name":"АН-НАБА","sura_translit":"Весть","ar":"إِنَّآ أَنذَرْنَـٰكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ ٱلْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ ٱلْكَافِرُ يَـٰلَيْتَنِى كُنتُ تُرَٰبًۢا","ru":"Мы предостерегли вас от наказания близкого. В тот день человек увидит, что уготовили его руки, а неверующий скажет: «Лучше бы мне быть прахом!»"},{"sura":79,"ayah":1,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَٱلنَّـٰزِعَـٰتِ غَرْقًا","ru":"Клянусь исторгающими души неверующих жестоко,"},{"sura":79,"ayah":2,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَٱلنَّـٰشِطَـٰتِ نَشْطًا","ru":"извлекающими души верующих нежно,"},{"sura":79,"ayah":3,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَٱلسَّـٰبِحَـٰتِ سَبْحًا","ru":"плывущими плавно,"},{"sura":79,"ayah":4,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَٱلسَّـٰبِقَـٰتِ سَبْقًا","ru":"опережающими стремительно"},{"sura":79,"ayah":5,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَٱلْمُدَبِّرَٰتِ أَمْرًا","ru":"и исполняющими повеления."},{"sura":79,"ayah":6,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"يَوْمَ تَرْجُفُ ٱلرَّاجِفَةُ","ru":"В тот день сотрясется сотрясающаяся (раздастся первый трубный глас, после которого творения умрут),"},{"sura":79,"ayah":7,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"تَتْبَعُهَا ٱلرَّادِفَةُ","ru":"вслед за чем последует еще одно сотрясение (раздастся второй трубный глас, после которого начнется воскрешение),"},{"sura":79,"ayah":8,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"قُلُوبٌ يَوْمَئِذٍ وَاجِفَةٌ","ru":"В тот день затрепещут сердца,"},{"sura":79,"ayah":9,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"أَبْصَـٰرُهَا خَـٰشِعَةٌ","ru":"и потупятся взоры."},{"sura":79,"ayah":10,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"يَقُولُونَ أَءِنَّا لَمَرْدُودُونَ فِى ٱلْحَافِرَةِ","ru":"Они говорят: «Неужели мы вернемся в прежнее состояние"},{"sura":79,"ayah":11,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"أَءِذَا كُنَّا عِظَـٰمًا نَّخِرَةً","ru":"после того, как станем истлевшими костями?!»"},{"sura":79,"ayah":12,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"قَالُوا۟ تِلْكَ إِذًا كَرَّةٌ خَاسِرَةٌ","ru":"Они говорят: «Если так, то это будет невыгодное возвращение!»"},{"sura":79,"ayah":13,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَإِنَّمَا هِىَ زَجْرَةٌ وَٰحِدَةٌ","ru":"Но раздастся лишь один глас,"},{"sura":79,"ayah":14,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَإِذَا هُم بِٱلسَّاهِرَةِ","ru":"и все они окажутся на поверхности земли."},{"sura":79,"ayah":15,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"هَلْ أَتَىٰكَ حَدِيثُ مُوسَىٰٓ","ru":"Дошел ли до тебя рассказ о Мусе (Моисее)?"},{"sura":79,"ayah":16,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"إِذْ نَادَىٰهُ رَبُّهُۥ بِٱلْوَادِ ٱلْمُقَدَّسِ طُوًى","ru":"Вот Господь его воззвал к нему в священной долине Тува (Това):"},{"sura":79,"ayah":17,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"ٱذْهَبْ إِلَىٰ فِرْعَوْنَ إِنَّهُۥ طَغَىٰ","ru":"«Ступай к Фараону, ибо он преступил границы дозволенного,"},{"sura":79,"ayah":18,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَقُلْ هَل لَّكَ إِلَىٰٓ أَن تَزَكَّىٰ","ru":"и скажи: \"Не следует ли тебе очиститься?"},{"sura":79,"ayah":19,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَأَهْدِيَكَ إِلَىٰ رَبِّكَ فَتَخْشَىٰ","ru":"Я укажу тебе путь к твоему Господу, и ты станешь богобоязнен\"»."},{"sura":79,"ayah":20,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَأَرَىٰهُ ٱلْـَٔايَةَ ٱلْكُبْرَىٰ","ru":"Он показал ему величайшее знамение,"},{"sura":79,"ayah":21,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَكَذَّبَ وَعَصَىٰ","ru":"но тот счел его ложью и ослушался,"},{"sura":79,"ayah":22,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"ثُمَّ أَدْبَرَ يَسْعَىٰ","ru":"а потом отвернулся и принялся усердствовать."},{"sura":79,"ayah":23,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَحَشَرَ فَنَادَىٰ","ru":"Он собрал толпу и громко воззвал,"},{"sura":79,"ayah":24,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَقَالَ أَنَا۠ رَبُّكُمُ ٱلْأَعْلَىٰ","ru":"и сказал: «Я – ваш Всевышний Господь!»"},{"sura":79,"ayah":25,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَأَخَذَهُ ٱللَّهُ نَكَالَ ٱلْـَٔاخِرَةِ وَٱلْأُولَىٰٓ","ru":"Тогда Аллах подверг его наказанию как в Последней жизни, так и в первой жизни."},{"sura":79,"ayah":26,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"إِنَّ فِى ذَٰلِكَ لَعِبْرَةً لِّمَن يَخْشَىٰٓ","ru":"Воистину, в этом было назидание для тех, кто богобоязнен."},{"sura":79,"ayah":27,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"ءَأَنتُمْ أَشَدُّ خَلْقًا أَمِ ٱلسَّمَآءُ ۚ بَنَىٰهَا","ru":"Вас ли труднее создать или небо? Он воздвиг его,"},{"sura":79,"ayah":28,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"رَفَعَ سَمْكَهَا فَسَوَّىٰهَا","ru":"поднял его своды и сделал его совершенным."},{"sura":79,"ayah":29,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَأَغْطَشَ لَيْلَهَا وَأَخْرَجَ ضُحَىٰهَا","ru":"Он сделал его ночью темным и вывел утреннюю зарю."},{"sura":79,"ayah":30,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَٱلْأَرْضَ بَعْدَ ذَٰلِكَ دَحَىٰهَآ","ru":"После этого Он распростер землю,"},{"sura":79,"ayah":31,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"أَخْرَجَ مِنْهَا مَآءَهَا وَمَرْعَىٰهَا","ru":"вывел из нее воду и пастбища"},{"sura":79,"ayah":32,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَٱلْجِبَالَ أَرْسَىٰهَا","ru":"и утвердил на ней горы"},{"sura":79,"ayah":33,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"مَتَـٰعًا لَّكُمْ وَلِأَنْعَـٰمِكُمْ","ru":"на пользу вам и вашему скоту."},{"sura":79,"ayah":34,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَإِذَا جَآءَتِ ٱلطَّآمَّةُ ٱلْكُبْرَىٰ","ru":"Когда же наступит Величайшее бедствие (День воскресения),"},{"sura":79,"ayah":35,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"يَوْمَ يَتَذَكَّرُ ٱلْإِنسَـٰنُ مَا سَعَىٰ","ru":"в тот день человек вспомнит о том, ради чего он усердствовал,"},{"sura":79,"ayah":36,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَبُرِّزَتِ ٱلْجَحِيمُ لِمَن يَرَىٰ","ru":"и Ад предстанет пред очами тех, кто будет видеть."},{"sura":79,"ayah":37,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَأَمَّا مَن طَغَىٰ","ru":"Тому, кто преступил границы дозволенного"},{"sura":79,"ayah":38,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَءَاثَرَ ٱلْحَيَوٰةَ ٱلدُّنْيَا","ru":"и отдал предпочтение мирской жизни,"},{"sura":79,"ayah":39,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَإِنَّ ٱلْجَحِيمَ هِىَ ٱلْمَأْوَىٰ","ru":"пристанищем будет Ад."},{"sura":79,"ayah":40,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"وَأَمَّا مَنْ خَافَ مَقَامَ رَبِّهِۦ وَنَهَى ٱلنَّفْسَ عَنِ ٱلْهَوَىٰ","ru":"Тому же, кто боялся предстать перед своим Господом и удерживал себя от страстей,"},{"sura":79,"ayah":41,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فَإِنَّ ٱلْجَنَّةَ هِىَ ٱلْمَأْوَىٰ","ru":"пристанищем будет Рай."},{"sura":79,"ayah":42,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"يَسْـَٔلُونَكَ عَنِ ٱلسَّاعَةِ أَيَّانَ مُرْسَىٰهَا","ru":"Тебя спрашивают о Часе: «Когда же он настанет?»"},{"sura":79,"ayah":43,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"فِيمَ أَنتَ مِن ذِكْرَىٰهَآ","ru":"К чему тебе упоминать об этом?"},{"sura":79,"ayah":44,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"إِلَىٰ رَبِّكَ مُنتَهَىٰهَآ","ru":"Только твой Господь ведает об этом."},{"sura":79,"ayah":45,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"إِنَّمَآ أَنتَ مُنذِرُ مَن يَخْشَىٰهَا","ru":"Воистину, ты – всего лишь предостерегающий увещеватель для тех, кто опасается этого."},{"sura":79,"ayah":46,"sura_name":"АН-НАЗИАТ","sura_translit":"Исторгающие","ar":"كَأَنَّهُمْ يَوْمَ يَرَوْنَهَا لَمْ يَلْبَثُوٓا۟ إِلَّا عَشِيَّةً أَوْ ضُحَىٰهَا","ru":"В тот день, когда они увидят его, им покажется, что они провели в этом мире лишь послеполуденные часы или утро."},{"sura":80,"ayah":1,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"عَبَسَ وَتَوَلَّىٰٓ","ru":"Он нахмурился и отвернулся,"},{"sura":80,"ayah":2,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"أَن جَآءَهُ ٱلْأَعْمَىٰ","ru":"потому что к нему подошел слепой."},{"sura":80,"ayah":3,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَمَا يُدْرِيكَ لَعَلَّهُۥ يَزَّكَّىٰٓ","ru":"Откуда тебе знать? Возможно, он бы очистился"},{"sura":80,"ayah":4,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"أَوْ يَذَّكَّرُ فَتَنفَعَهُ ٱلذِّكْرَىٰٓ","ru":"или помянул бы наставление, и поминание принесло бы ему пользу."},{"sura":80,"ayah":5,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"أَمَّا مَنِ ٱسْتَغْنَىٰ","ru":"Тому, кто решил, что он ни в чем не нуждается,"},{"sura":80,"ayah":6,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَأَنتَ لَهُۥ تَصَدَّىٰ","ru":"ты уделяешь внимание,"},{"sura":80,"ayah":7,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَمَا عَلَيْكَ أَلَّا يَزَّكَّىٰ","ru":"Что же будет тебе, если он не очистится?"},{"sura":80,"ayah":8,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَأَمَّا مَن جَآءَكَ يَسْعَىٰ","ru":"А того, кто приходит к тебе со рвением"},{"sura":80,"ayah":9,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَهُوَ يَخْشَىٰ","ru":"и страшится Аллаха,"},{"sura":80,"ayah":10,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَأَنتَ عَنْهُ تَلَهَّىٰ","ru":"ты оставляешь без внимания."},{"sura":80,"ayah":11,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"كَلَّآ إِنَّهَا تَذْكِرَةٌ","ru":"Но нет! Это есть Назидание,"},{"sura":80,"ayah":12,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَمَن شَآءَ ذَكَرَهُۥ","ru":"и пусть помянет его всякий желающий."},{"sura":80,"ayah":13,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فِى صُحُفٍ مُّكَرَّمَةٍ","ru":"Оно записано в свитках почитаемых,"},{"sura":80,"ayah":14,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"مَّرْفُوعَةٍ مُّطَهَّرَةٍۭ","ru":"вознесенных и очищенных,"},{"sura":80,"ayah":15,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"بِأَيْدِى سَفَرَةٍ","ru":"в руках посланцев"},{"sura":80,"ayah":16,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"كِرَامٍۭ بَرَرَةٍ","ru":"благородных и покорных."},{"sura":80,"ayah":17,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"قُتِلَ ٱلْإِنسَـٰنُ مَآ أَكْفَرَهُۥ","ru":"Да сгинет человек! Как же он неблагодарен!"},{"sura":80,"ayah":18,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"مِنْ أَىِّ شَىْءٍ خَلَقَهُۥ","ru":"Из чего Он сотворил его?"},{"sura":80,"ayah":19,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"مِن نُّطْفَةٍ خَلَقَهُۥ فَقَدَّرَهُۥ","ru":"Он сотворил его из капли и соразмерил,"},{"sura":80,"ayah":20,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"ثُمَّ ٱلسَّبِيلَ يَسَّرَهُۥ","ru":"потом облегчил ему путь,"},{"sura":80,"ayah":21,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"ثُمَّ أَمَاتَهُۥ فَأَقْبَرَهُۥ","ru":"потом умертвил его и поместил в могилу."},{"sura":80,"ayah":22,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"ثُمَّ إِذَا شَآءَ أَنشَرَهُۥ","ru":"Потом, когда пожелает, Он воскресит его."},{"sura":80,"ayah":23,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"كَلَّا لَمَّا يَقْضِ مَآ أَمَرَهُۥ","ru":"Но нет! Он не выполняет того, что Он приказал ему."},{"sura":80,"ayah":24,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَلْيَنظُرِ ٱلْإِنسَـٰنُ إِلَىٰ طَعَامِهِۦٓ","ru":"Пусть посмотрит человек на свое пропитание!"},{"sura":80,"ayah":25,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"أَنَّا صَبَبْنَا ٱلْمَآءَ صَبًّا","ru":"Мы проливаем обильные ливни,"},{"sura":80,"ayah":26,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"ثُمَّ شَقَقْنَا ٱلْأَرْضَ شَقًّا","ru":"затем рассекаем землю трещинами"},{"sura":80,"ayah":27,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَأَنۢبَتْنَا فِيهَا حَبًّا","ru":"и взращиваем на ней злаки,"},{"sura":80,"ayah":28,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَعِنَبًا وَقَضْبًا","ru":"виноград и люцерну,"},{"sura":80,"ayah":29,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَزَيْتُونًا وَنَخْلًا","ru":"маслины и пальмы,"},{"sura":80,"ayah":30,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَحَدَآئِقَ غُلْبًا","ru":"сады густые,"},{"sura":80,"ayah":31,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَفَـٰكِهَةً وَأَبًّا","ru":"плоды и травы"},{"sura":80,"ayah":32,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"مَّتَـٰعًا لَّكُمْ وَلِأَنْعَـٰمِكُمْ","ru":"на пользу вам и вашей скотине."},{"sura":80,"ayah":33,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"فَإِذَا جَآءَتِ ٱلصَّآخَّةُ","ru":"Когда же раздастся Оглушительный глас,"},{"sura":80,"ayah":34,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"يَوْمَ يَفِرُّ ٱلْمَرْءُ مِنْ أَخِيهِ","ru":"в тот день человек бросит своего брата,"},{"sura":80,"ayah":35,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَأُمِّهِۦ وَأَبِيهِ","ru":"свою мать и своего отца,"},{"sura":80,"ayah":36,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَصَـٰحِبَتِهِۦ وَبَنِيهِ","ru":"свою жену и своих сыновей,"},{"sura":80,"ayah":37,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"لِكُلِّ ٱمْرِئٍ مِّنْهُمْ يَوْمَئِذٍ شَأْنٌ يُغْنِيهِ","ru":"ибо у каждого человека своих забот будет сполна."},{"sura":80,"ayah":38,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وُجُوهٌ يَوْمَئِذٍ مُّسْفِرَةٌ","ru":"В тот день одни лица будут сиять,"},{"sura":80,"ayah":39,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"ضَاحِكَةٌ مُّسْتَبْشِرَةٌ","ru":"смеяться и ликовать."},{"sura":80,"ayah":40,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"وَوُجُوهٌ يَوْمَئِذٍ عَلَيْهَا غَبَرَةٌ","ru":"На других же лицах в тот день будет прах,"},{"sura":80,"ayah":41,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"تَرْهَقُهَا قَتَرَةٌ","ru":"который покроет их мраком."},{"sura":80,"ayah":42,"sura_name":"АБАСА","sura_translit":"Нахмурился","ar":"أُو۟لَـٰٓئِكَ هُمُ ٱلْكَفَرَةُ ٱلْفَجَرَةُ","ru":"Это будут неверующие грешники."},{"sura":81,"ayah":1,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"إِذَا ٱلشَّمْسُ كُوِّرَتْ","ru":"Когда солнце будет скручено,"},{"sura":81,"ayah":2,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلنُّجُومُ ٱنكَدَرَتْ","ru":"когда падут звезды,"},{"sura":81,"ayah":3,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْجِبَالُ سُيِّرَتْ","ru":"когда горы сдвинутся с мест,"},{"sura":81,"ayah":4,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْعِشَارُ عُطِّلَتْ","ru":"когда верблюдицы на десятом месяце беременности останутся без присмотра,"},{"sura":81,"ayah":5,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْوُحُوشُ حُشِرَتْ","ru":"когда дикие звери будут собраны,"},{"sura":81,"ayah":6,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْبِحَارُ سُجِّرَتْ","ru":"когда моря запылают,"},{"sura":81,"ayah":7,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلنُّفُوسُ زُوِّجَتْ","ru":"когда души объединятся,"},{"sura":81,"ayah":8,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْمَوْءُۥدَةُ سُئِلَتْ","ru":"когда зарытую живьем спросят,"},{"sura":81,"ayah":9,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"بِأَىِّ ذَنۢبٍ قُتِلَتْ","ru":"за какой грех ее убили,"},{"sura":81,"ayah":10,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلصُّحُفُ نُشِرَتْ","ru":"когда свитки будут развернуты,"},{"sura":81,"ayah":11,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلسَّمَآءُ كُشِطَتْ","ru":"когда небо будет сдернуто,"},{"sura":81,"ayah":12,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْجَحِيمُ سُعِّرَتْ","ru":"когда Ад будет разожжен,"},{"sura":81,"ayah":13,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَإِذَا ٱلْجَنَّةُ أُزْلِفَتْ","ru":"когда Рай будет приближен,"},{"sura":81,"ayah":14,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"عَلِمَتْ نَفْسٌ مَّآ أَحْضَرَتْ","ru":"тогда познает душа, что она принесла."},{"sura":81,"ayah":15,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"فَلَآ أُقْسِمُ بِٱلْخُنَّسِ","ru":"Но нет! Клянусь планетами отступающими,"},{"sura":81,"ayah":16,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"ٱلْجَوَارِ ٱلْكُنَّسِ","ru":"передвигающимися и исчезающими!"},{"sura":81,"ayah":17,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَٱلَّيْلِ إِذَا عَسْعَسَ","ru":"Клянусь ночью наступающей!"},{"sura":81,"ayah":18,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَٱلصُّبْحِ إِذَا تَنَفَّسَ","ru":"Клянусь рассветом брезжущим!"},{"sura":81,"ayah":19,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"إِنَّهُۥ لَقَوْلُ رَسُولٍ كَرِيمٍ","ru":"Это – слова благородного посланца,"},{"sura":81,"ayah":20,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"ذِى قُوَّةٍ عِندَ ذِى ٱلْعَرْشِ مَكِينٍ","ru":"обладателя силы при Владыке Трона, могущественного,"},{"sura":81,"ayah":21,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"مُّطَاعٍ ثَمَّ أَمِينٍ","ru":"которому там (на небесах) повинуются, доверенного."},{"sura":81,"ayah":22,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَمَا صَاحِبُكُم بِمَجْنُونٍ","ru":"Ваш товарищ не является одержимым."},{"sura":81,"ayah":23,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَلَقَدْ رَءَاهُ بِٱلْأُفُقِ ٱلْمُبِينِ","ru":"Он видел его (Джибриля) на ясном горизонте"},{"sura":81,"ayah":24,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَمَا هُوَ عَلَى ٱلْغَيْبِ بِضَنِينٍ","ru":"и не скупится передать сокровенное."},{"sura":81,"ayah":25,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَمَا هُوَ بِقَوْلِ شَيْطَـٰنٍ رَّجِيمٍ","ru":"Это – не речи проклятого сатаны."},{"sura":81,"ayah":26,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"فَأَيْنَ تَذْهَبُونَ","ru":"Куда же вы направляетесь?"},{"sura":81,"ayah":27,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"إِنْ هُوَ إِلَّا ذِكْرٌ لِّلْعَـٰلَمِينَ","ru":"Это – лишь Напоминание мирам,"},{"sura":81,"ayah":28,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"لِمَن شَآءَ مِنكُمْ أَن يَسْتَقِيمَ","ru":"тем из вас, кто желает следовать прямым путем."},{"sura":81,"ayah":29,"sura_name":"АТ-ТАКВИР","sura_translit":"Скручивание","ar":"وَمَا تَشَآءُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُ رَبُّ ٱلْعَـٰلَمِينَ","ru":"Но вы не пожелаете этого, если этого не пожелает Аллах, Господь миров."},{"sura":82,"ayah":1,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"إِذَا ٱلسَّمَآءُ ٱنفَطَرَتْ","ru":"Когда небо расколется,"},{"sura":82,"ayah":2,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَإِذَا ٱلْكَوَاكِبُ ٱنتَثَرَتْ","ru":"когда звезды осыплются,"},{"sura":82,"ayah":3,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَإِذَا ٱلْبِحَارُ فُجِّرَتْ","ru":"когда моря смешаются (или высохнут),"},{"sura":82,"ayah":4,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَإِذَا ٱلْقُبُورُ بُعْثِرَتْ","ru":"когда могилы перевернутся,"},{"sura":82,"ayah":5,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"عَلِمَتْ نَفْسٌ مَّا قَدَّمَتْ وَأَخَّرَتْ","ru":"тогда каждая душа узнает, что она совершила и что оставила после себя."},{"sura":82,"ayah":6,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"يَـٰٓأَيُّهَا ٱلْإِنسَـٰنُ مَا غَرَّكَ بِرَبِّكَ ٱلْكَرِيمِ","ru":"О человек! Что ввело тебя в заблуждение относительно твоего Великодушного Господа,"},{"sura":82,"ayah":7,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"ٱلَّذِى خَلَقَكَ فَسَوَّىٰكَ فَعَدَلَكَ","ru":"Который сотворил тебя и сделал твой облик совершенным и соразмеренным?"},{"sura":82,"ayah":8,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"فِىٓ أَىِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ","ru":"Он сложил тебя в том облике, в каком пожелал."},{"sura":82,"ayah":9,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"كَلَّا بَلْ تُكَذِّبُونَ بِٱلدِّينِ","ru":"Но нет! Вы считаете ложью воздаяние."},{"sura":82,"ayah":10,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَإِنَّ عَلَيْكُمْ لَحَـٰفِظِينَ","ru":"Воистину, над вами есть хранители –"},{"sura":82,"ayah":11,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"كِرَامًا كَـٰتِبِينَ","ru":"благородные писцы,"},{"sura":82,"ayah":12,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"يَعْلَمُونَ مَا تَفْعَلُونَ","ru":"которые знают обо всем, что вы совершаете."},{"sura":82,"ayah":13,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ","ru":"Воистину, благочестивые окажутся в блаженстве."},{"sura":82,"ayah":14,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَإِنَّ ٱلْفُجَّارَ لَفِى جَحِيمٍ","ru":"Воистину, грешники окажутся в Аду,"},{"sura":82,"ayah":15,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"يَصْلَوْنَهَا يَوْمَ ٱلدِّينِ","ru":"куда они войдут в День воздаяния."},{"sura":82,"ayah":16,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَمَا هُمْ عَنْهَا بِغَآئِبِينَ","ru":"Они не смогут избежать этого."},{"sura":82,"ayah":17,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"وَمَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ","ru":"Откуда ты мог знать, что такое День воздаяния?"},{"sura":82,"ayah":18,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"ثُمَّ مَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ","ru":"Да, откуда ты мог знать, что такое День воздаяния?"},{"sura":82,"ayah":19,"sura_name":"АЛЬ-ИНФИТАР","sura_translit":"Раскалывание","ar":"يَوْمَ لَا تَمْلِكُ نَفْسٌ لِّنَفْسٍ شَيْـًٔا ۖ وَٱلْأَمْرُ يَوْمَئِذٍ لِّلَّهِ","ru":"В тот день ни одна душа не сможет ничем помочь другой, и власть в тот день будет принадлежать Аллаху."},{"sura":83,"ayah":1,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَيْلٌ لِّلْمُطَفِّفِينَ","ru":"Горе обвешивающим,"},{"sura":83,"ayah":2,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"ٱلَّذِينَ إِذَا ٱكْتَالُوا۟ عَلَى ٱلنَّاسِ يَسْتَوْفُونَ","ru":"которые хотят получить сполна, когда люди отмеривают им,"},{"sura":83,"ayah":3,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَإِذَا كَالُوهُمْ أَو وَّزَنُوهُمْ يُخْسِرُونَ","ru":"а когда сами мерят или взвешивают для других, то наносят им урон."},{"sura":83,"ayah":4,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"أَلَا يَظُنُّ أُو۟لَـٰٓئِكَ أَنَّهُم مَّبْعُوثُونَ","ru":"Разве не думают они, что будут воскрешены"},{"sura":83,"ayah":5,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"لِيَوْمٍ عَظِيمٍ","ru":"в Великий день –"},{"sura":83,"ayah":6,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"يَوْمَ يَقُومُ ٱلنَّاسُ لِرَبِّ ٱلْعَـٰلَمِينَ","ru":"в тот день, когда люди предстанут перед Господом миров?"},{"sura":83,"ayah":7,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كَلَّآ إِنَّ كِتَـٰبَ ٱلْفُجَّارِ لَفِى سِجِّينٍ","ru":"Но нет! Книга грешников окажется в Сиджжине."},{"sura":83,"ayah":8,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَمَآ أَدْرَىٰكَ مَا سِجِّينٌ","ru":"Откуда ты мог знать, что такое Сиджжин?"},{"sura":83,"ayah":9,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كِتَـٰبٌ مَّرْقُومٌ","ru":"Это – книга начертанная."},{"sura":83,"ayah":10,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ","ru":"Горе в тот день обвиняющим во лжи,"},{"sura":83,"ayah":11,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"ٱلَّذِينَ يُكَذِّبُونَ بِيَوْمِ ٱلدِّينِ","ru":"которые считают ложью День воздаяния!"},{"sura":83,"ayah":12,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَمَا يُكَذِّبُ بِهِۦٓ إِلَّا كُلُّ مُعْتَدٍ أَثِيمٍ","ru":"Его считает ложью только преступник и грешник."},{"sura":83,"ayah":13,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"إِذَا تُتْلَىٰ عَلَيْهِ ءَايَـٰتُنَا قَالَ أَسَـٰطِيرُ ٱلْأَوَّلِينَ","ru":"Когда ему читают Наши аяты, он говорит: «Это – сказки древних народов!»"},{"sura":83,"ayah":14,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كَلَّا ۖ بَلْ ۜ رَانَ عَلَىٰ قُلُوبِهِم مَّا كَانُوا۟ يَكْسِبُونَ","ru":"Но нет! Их сердца окутаны тем, что они приобрели."},{"sura":83,"ayah":15,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كَلَّآ إِنَّهُمْ عَن رَّبِّهِمْ يَوْمَئِذٍ لَّمَحْجُوبُونَ","ru":"В тот день они будут отделены от своего Господа завесой,"},{"sura":83,"ayah":16,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"ثُمَّ إِنَّهُمْ لَصَالُوا۟ ٱلْجَحِيمِ","ru":"а потом они попадут в Ад,"},{"sura":83,"ayah":17,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"ثُمَّ يُقَالُ هَـٰذَا ٱلَّذِى كُنتُم بِهِۦ تُكَذِّبُونَ","ru":"после чего им скажут: «Вот то, что вы считали ложью»."},{"sura":83,"ayah":18,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كَلَّآ إِنَّ كِتَـٰبَ ٱلْأَبْرَارِ لَفِى عِلِّيِّينَ","ru":"Но нет! Книга благочестивых окажется в Иллиййуне."},{"sura":83,"ayah":19,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَمَآ أَدْرَىٰكَ مَا عِلِّيُّونَ","ru":"Откуда ты мог знать, что такое Иллиййун?"},{"sura":83,"ayah":20,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"كِتَـٰبٌ مَّرْقُومٌ","ru":"Это – книга начертанная,"},{"sura":83,"ayah":21,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"يَشْهَدُهُ ٱلْمُقَرَّبُونَ","ru":"которую видят приближенные."},{"sura":83,"ayah":22,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ","ru":"Воистину, благочестивые окажутся в блаженстве"},{"sura":83,"ayah":23,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ","ru":"и будут созерцать на ложах."},{"sura":83,"ayah":24,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"تَعْرِفُ فِى وُجُوهِهِمْ نَضْرَةَ ٱلنَّعِيمِ","ru":"На их лицах ты увидишь блеск благоденствия."},{"sura":83,"ayah":25,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"يُسْقَوْنَ مِن رَّحِيقٍ مَّخْتُومٍ","ru":"Их будут поить выдержанным вином,"},{"sura":83,"ayah":26,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"خِتَـٰمُهُۥ مِسْكٌ ۚ وَفِى ذَٰلِكَ فَلْيَتَنَافَسِ ٱلْمُتَنَـٰفِسُونَ","ru":"запечатанным мускусом. Пусть же ради этого состязаются состязающиеся!"},{"sura":83,"ayah":27,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَمِزَاجُهُۥ مِن تَسْنِيمٍ","ru":"Оно смешано с напитком из Таснима –"},{"sura":83,"ayah":28,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"عَيْنًا يَشْرَبُ بِهَا ٱلْمُقَرَّبُونَ","ru":"источника, из которого пьют приближенные."},{"sura":83,"ayah":29,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"إِنَّ ٱلَّذِينَ أَجْرَمُوا۟ كَانُوا۟ مِنَ ٱلَّذِينَ ءَامَنُوا۟ يَضْحَكُونَ","ru":"Грешники смеялись над теми, которые уверовали."},{"sura":83,"ayah":30,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَإِذَا مَرُّوا۟ بِهِمْ يَتَغَامَزُونَ","ru":"Проходя мимо них, они подмигивали друг другу,"},{"sura":83,"ayah":31,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَإِذَا ٱنقَلَبُوٓا۟ إِلَىٰٓ أَهْلِهِمُ ٱنقَلَبُوا۟ فَكِهِينَ","ru":"возвращаясь к своим семьям, они возвращались, шутя,"},{"sura":83,"ayah":32,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَإِذَا رَأَوْهُمْ قَالُوٓا۟ إِنَّ هَـٰٓؤُلَآءِ لَضَآلُّونَ","ru":"а завидя их, они говорили: «Воистину, эти впали в заблуждение»."},{"sura":83,"ayah":33,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"وَمَآ أُرْسِلُوا۟ عَلَيْهِمْ حَـٰفِظِينَ","ru":"Однако они не были посланы к ним хранителями."},{"sura":83,"ayah":34,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"فَٱلْيَوْمَ ٱلَّذِينَ ءَامَنُوا۟ مِنَ ٱلْكُفَّارِ يَضْحَكُونَ","ru":"В тот день верующие будут смеяться над неверующими"},{"sura":83,"ayah":35,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"عَلَى ٱلْأَرَآئِكِ يَنظُرُونَ","ru":"и созерцать на ложах."},{"sura":83,"ayah":36,"sura_name":"АЛЬ-МУТАФФИФИН","sura_translit":"Обвешивающие","ar":"هَلْ ثُوِّبَ ٱلْكُفَّارُ مَا كَانُوا۟ يَفْعَلُونَ","ru":"Разве неверующие не получат воздаяние за то, что они совершали?"},{"sura":84,"ayah":1,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"إِذَا ٱلسَّمَآءُ ٱنشَقَّتْ","ru":"Когда небо разверзнется"},{"sura":84,"ayah":2,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ","ru":"и внемлет своему Господу, как ему надлежит,"},{"sura":84,"ayah":3,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَإِذَا ٱلْأَرْضُ مُدَّتْ","ru":"когда земля будет распростерта,"},{"sura":84,"ayah":4,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَأَلْقَتْ مَا فِيهَا وَتَخَلَّتْ","ru":"извергнет то, что в ней, и опустошится,"},{"sura":84,"ayah":5,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ","ru":"и внемлет своему Господу, как ей надлежит..."},{"sura":84,"ayah":6,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"يَـٰٓأَيُّهَا ٱلْإِنسَـٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدْحًا فَمُلَـٰقِيهِ","ru":"О человек! Ты стремишься к своему Господу и встретишься с Ним."},{"sura":84,"ayah":7,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَأَمَّا مَنْ أُوتِىَ كِتَـٰبَهُۥ بِيَمِينِهِۦ","ru":"Тот, кому его книга будет вручена в правую руку,"},{"sura":84,"ayah":8,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَسَوْفَ يُحَاسَبُ حِسَابًا يَسِيرًا","ru":"получит легкий расчет"},{"sura":84,"ayah":9,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَيَنقَلِبُ إِلَىٰٓ أَهْلِهِۦ مَسْرُورًا","ru":"и вернется к своей семье радостным."},{"sura":84,"ayah":10,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَأَمَّا مَنْ أُوتِىَ كِتَـٰبَهُۥ وَرَآءَ ظَهْرِهِۦ","ru":"А тот, кому его книга будет вручена из-за спины,"},{"sura":84,"ayah":11,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَسَوْفَ يَدْعُوا۟ ثُبُورًا","ru":"станет призывать погибель"},{"sura":84,"ayah":12,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَيَصْلَىٰ سَعِيرًا","ru":"и будет гореть в Пламени."},{"sura":84,"ayah":13,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"إِنَّهُۥ كَانَ فِىٓ أَهْلِهِۦ مَسْرُورًا","ru":"Он радовался, находясь в кругу своей семьи,"},{"sura":84,"ayah":14,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"إِنَّهُۥ ظَنَّ أَن لَّن يَحُورَ","ru":"и полагал, что не вернется обратно."},{"sura":84,"ayah":15,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"بَلَىٰٓ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرًا","ru":"Но нет! Господь его видел его."},{"sura":84,"ayah":16,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَلَآ أُقْسِمُ بِٱلشَّفَقِ","ru":"Клянусь вечерней зарею!"},{"sura":84,"ayah":17,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَٱلَّيْلِ وَمَا وَسَقَ","ru":"Клянусь ночью и тем, что она собирает!"},{"sura":84,"ayah":18,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَٱلْقَمَرِ إِذَا ٱتَّسَقَ","ru":"Клянусь полной луною!"},{"sura":84,"ayah":19,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"لَتَرْكَبُنَّ طَبَقًا عَن طَبَقٍ","ru":"Вы переходите из одного состояния в другое."},{"sura":84,"ayah":20,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَمَا لَهُمْ لَا يُؤْمِنُونَ","ru":"Почему же они не веруют"},{"sura":84,"ayah":21,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَإِذَا قُرِئَ عَلَيْهِمُ ٱلْقُرْءَانُ لَا يَسْجُدُونَ ۩","ru":"и не падают ниц, когда им читают Коран?"},{"sura":84,"ayah":22,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"بَلِ ٱلَّذِينَ كَفَرُوا۟ يُكَذِّبُونَ","ru":"Неверующие считают это ложью,"},{"sura":84,"ayah":23,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"وَٱللَّهُ أَعْلَمُ بِمَا يُوعُونَ","ru":"но Аллаху лучше знать, что они вмещают (какие добрые и злые деяния они совершают)."},{"sura":84,"ayah":24,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"فَبَشِّرْهُم بِعَذَابٍ أَلِيمٍ","ru":"Обрадуй же их мучительными страданиями,"},{"sura":84,"ayah":25,"sura_name":"АЛЬ-ИНШИКАК","sura_translit":"Развержение","ar":"إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ لَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍۭ","ru":"кроме тех, которые уверовали и совершали праведные деяния. Им уготована награда неиссякаемая."},{"sura":85,"ayah":1,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَٱلسَّمَآءِ ذَاتِ ٱلْبُرُوجِ","ru":"Клянусь небом с созвездиями Зодиака!"},{"sura":85,"ayah":2,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَٱلْيَوْمِ ٱلْمَوْعُودِ","ru":"Клянусь днем обещанным!"},{"sura":85,"ayah":3,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَشَاهِدٍ وَمَشْهُودٍ","ru":"Клянусь свидетельствующим и засвидетельствованным!"},{"sura":85,"ayah":4,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"قُتِلَ أَصْحَـٰبُ ٱلْأُخْدُودِ","ru":"Да сгинут собравшиеся у рва"},{"sura":85,"ayah":5,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"ٱلنَّارِ ذَاتِ ٱلْوَقُودِ","ru":"огненного, поддерживаемого растопкой,"},{"sura":85,"ayah":6,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"إِذْ هُمْ عَلَيْهَا قُعُودٌ","ru":"Вот они уселись возле него,"},{"sura":85,"ayah":7,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَهُمْ عَلَىٰ مَا يَفْعَلُونَ بِٱلْمُؤْمِنِينَ شُهُودٌ","ru":"будучи свидетелями того, что творят с верующими."},{"sura":85,"ayah":8,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَمَا نَقَمُوا۟ مِنْهُمْ إِلَّآ أَن يُؤْمِنُوا۟ بِٱللَّهِ ٱلْعَزِيزِ ٱلْحَمِيدِ","ru":"Они вымещали им только за то, что те уверовали в Аллаха Могущественного, Достохвального,"},{"sura":85,"ayah":9,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"ٱلَّذِى لَهُۥ مُلْكُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ ۚ وَٱللَّهُ عَلَىٰ كُلِّ شَىْءٍ شَهِيدٌ","ru":"Которому принадлежит власть над небесами и землей. Аллах – Свидетель всякой вещи!"},{"sura":85,"ayah":10,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"إِنَّ ٱلَّذِينَ فَتَنُوا۟ ٱلْمُؤْمِنِينَ وَٱلْمُؤْمِنَـٰتِ ثُمَّ لَمْ يَتُوبُوا۟ فَلَهُمْ عَذَابُ جَهَنَّمَ وَلَهُمْ عَذَابُ ٱلْحَرِيقِ","ru":"Тем, которые подвергли искушению верующих мужчин и женщин и не раскаялись, уготованы мучения в Геенне, мучения от обжигающего Огня."},{"sura":85,"ayah":11,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ لَهُمْ جَنَّـٰتٌ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَـٰرُ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْكَبِيرُ","ru":"Тем же, которые уверовали и совершали праведные деяния, уготованы Райские сады, в которых текут реки. Это – великое преуспеяние!"},{"sura":85,"ayah":12,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"إِنَّ بَطْشَ رَبِّكَ لَشَدِيدٌ","ru":"Воистину, Хватка твоего Господа сурова!"},{"sura":85,"ayah":13,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"إِنَّهُۥ هُوَ يُبْدِئُ وَيُعِيدُ","ru":"Воистину, Он начинает и повторяет (создает творение в первый раз и воссоздает его или начинает наказывать и повторяет наказание)."},{"sura":85,"ayah":14,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَهُوَ ٱلْغَفُورُ ٱلْوَدُودُ","ru":"Он – Прощающий, Любящий (или Любимый),"},{"sura":85,"ayah":15,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"ذُو ٱلْعَرْشِ ٱلْمَجِيدُ","ru":"Владыка Трона, Славный."},{"sura":85,"ayah":16,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"فَعَّالٌ لِّمَا يُرِيدُ","ru":"Он вершит то, что пожелает."},{"sura":85,"ayah":17,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"هَلْ أَتَىٰكَ حَدِيثُ ٱلْجُنُودِ","ru":"Дошел ли до тебя рассказ о воинствах,"},{"sura":85,"ayah":18,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"فِرْعَوْنَ وَثَمُودَ","ru":"о Фараоне и самудянах?"},{"sura":85,"ayah":19,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"بَلِ ٱلَّذِينَ كَفَرُوا۟ فِى تَكْذِيبٍ","ru":"Неверующие считают это ложью,"},{"sura":85,"ayah":20,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"وَٱللَّهُ مِن وَرَآئِهِم مُّحِيطٌۢ","ru":"Аллах же окружает их сзади."},{"sura":85,"ayah":21,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"بَلْ هُوَ قُرْءَانٌ مَّجِيدٌ","ru":"Это – славный Коран,"},{"sura":85,"ayah":22,"sura_name":"АЛЬ-БУРУДЖ","sura_translit":"Созвездия Зодиака","ar":"فِى لَوْحٍ مَّحْفُوظٍۭ","ru":"находящийся в Хранимой скрижали."},{"sura":86,"ayah":1,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَٱلسَّمَآءِ وَٱلطَّارِقِ","ru":"Клянусь небом и ночным путником!"},{"sura":86,"ayah":2,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَمَآ أَدْرَىٰكَ مَا ٱلطَّارِقُ","ru":"Откуда ты мог знать, что такое ночной путник?"},{"sura":86,"ayah":3,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"ٱلنَّجْمُ ٱلثَّاقِبُ","ru":"Это – звезда пронизывающая небеса своим светом."},{"sura":86,"ayah":4,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"إِن كُلُّ نَفْسٍ لَّمَّا عَلَيْهَا حَافِظٌ","ru":"Нет души, при которой не было бы хранителя."},{"sura":86,"ayah":5,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"فَلْيَنظُرِ ٱلْإِنسَـٰنُ مِمَّ خُلِقَ","ru":"Пусть посмотрит человек, из чего он создан."},{"sura":86,"ayah":6,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"خُلِقَ مِن مَّآءٍ دَافِقٍ","ru":"Он создан из изливающейся жидкости,"},{"sura":86,"ayah":7,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"يَخْرُجُ مِنۢ بَيْنِ ٱلصُّلْبِ وَٱلتَّرَآئِبِ","ru":"которая выходит между чреслами и грудными костями."},{"sura":86,"ayah":8,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"إِنَّهُۥ عَلَىٰ رَجْعِهِۦ لَقَادِرٌ","ru":"Воистину, Он властен вернуть его."},{"sura":86,"ayah":9,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"يَوْمَ تُبْلَى ٱلسَّرَآئِرُ","ru":"В тот день подвергнут испытанию все тайны,"},{"sura":86,"ayah":10,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"فَمَا لَهُۥ مِن قُوَّةٍ وَلَا نَاصِرٍ","ru":"и тогда не будет у него ни силы, ни помощника."},{"sura":86,"ayah":11,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَٱلسَّمَآءِ ذَاتِ ٱلرَّجْعِ","ru":"Клянусь возобновляющим дожди небом!"},{"sura":86,"ayah":12,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَٱلْأَرْضِ ذَاتِ ٱلصَّدْعِ","ru":"Клянусь раскалываемой землей!"},{"sura":86,"ayah":13,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"إِنَّهُۥ لَقَوْلٌ فَصْلٌ","ru":"Это – Слово различающее,"},{"sura":86,"ayah":14,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَمَا هُوَ بِٱلْهَزْلِ","ru":"а не шутка."},{"sura":86,"ayah":15,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"إِنَّهُمْ يَكِيدُونَ كَيْدًا","ru":"Они замышляют козни,"},{"sura":86,"ayah":16,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"وَأَكِيدُ كَيْدًا","ru":"и Я замышляю козни."},{"sura":86,"ayah":17,"sura_name":"АТ-ТАРИК","sura_translit":"Ночной путник","ar":"فَمَهِّلِ ٱلْكَـٰفِرِينَ أَمْهِلْهُمْ رُوَيْدًۢا","ru":"Предоставь же неверующим отсрочку, помедли с ними недолго!"},{"sura":87,"ayah":1,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"سَبِّحِ ٱسْمَ رَبِّكَ ٱلْأَعْلَى","ru":"Славь имя Господа твоего Всевышнего,"},{"sura":87,"ayah":2,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"ٱلَّذِى خَلَقَ فَسَوَّىٰ","ru":"Который сотворил все сущее и всему придал соразмерность,"},{"sura":87,"ayah":3,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَٱلَّذِى قَدَّرَ فَهَدَىٰ","ru":"Который предопределил судьбу творений и указал путь,"},{"sura":87,"ayah":4,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَٱلَّذِىٓ أَخْرَجَ ٱلْمَرْعَىٰ","ru":"Который взрастил пастбища,"},{"sura":87,"ayah":5,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"فَجَعَلَهُۥ غُثَآءً أَحْوَىٰ","ru":"а потом превратил их в темный сор."},{"sura":87,"ayah":6,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"سَنُقْرِئُكَ فَلَا تَنسَىٰٓ","ru":"Мы позволим тебе прочесть Коран, и ты не забудешь ничего,"},{"sura":87,"ayah":7,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"إِلَّا مَا شَآءَ ٱللَّهُ ۚ إِنَّهُۥ يَعْلَمُ ٱلْجَهْرَ وَمَا يَخْفَىٰ","ru":"кроме того, что пожелает Аллах. Он знает явное и то, что сокрыто."},{"sura":87,"ayah":8,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَنُيَسِّرُكَ لِلْيُسْرَىٰ","ru":"Мы облегчим тебе путь к легчайшему."},{"sura":87,"ayah":9,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"فَذَكِّرْ إِن نَّفَعَتِ ٱلذِّكْرَىٰ","ru":"Наставляй же людей, если напоминание принесет пользу."},{"sura":87,"ayah":10,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"سَيَذَّكَّرُ مَن يَخْشَىٰ","ru":"Воспримет его тот, кто страшится,"},{"sura":87,"ayah":11,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَيَتَجَنَّبُهَا ٱلْأَشْقَى","ru":"и отвернется от него самый несчастный,"},{"sura":87,"ayah":12,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"ٱلَّذِى يَصْلَى ٱلنَّارَ ٱلْكُبْرَىٰ","ru":"который войдет в Огонь величайший."},{"sura":87,"ayah":13,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"ثُمَّ لَا يَمُوتُ فِيهَا وَلَا يَحْيَىٰ","ru":"Не умрет он там и не будет жить."},{"sura":87,"ayah":14,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"قَدْ أَفْلَحَ مَن تَزَكَّىٰ","ru":"Преуспел тот, кто очистился,"},{"sura":87,"ayah":15,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَذَكَرَ ٱسْمَ رَبِّهِۦ فَصَلَّىٰ","ru":"поминал имя своего Господа и совершал намаз."},{"sura":87,"ayah":16,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"بَلْ تُؤْثِرُونَ ٱلْحَيَوٰةَ ٱلدُّنْيَا","ru":"Но нет! Вы отдаете предпочтение мирской жизни,"},{"sura":87,"ayah":17,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"وَٱلْـَٔاخِرَةُ خَيْرٌ وَأَبْقَىٰٓ","ru":"хотя Последняя жизнь – лучше и дольше."},{"sura":87,"ayah":18,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"إِنَّ هَـٰذَا لَفِى ٱلصُّحُفِ ٱلْأُولَىٰ","ru":"Воистину, это записано в первых свитках –"},{"sura":87,"ayah":19,"sura_name":"АЛЬ-АЛЯ","sura_translit":"Всевышний","ar":"صُحُفِ إِبْرَٰهِيمَ وَمُوسَىٰ","ru":"свитках Ибрахима (Авраама) и Мусы (Моисея)."},{"sura":88,"ayah":1,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"هَلْ أَتَىٰكَ حَدِيثُ ٱلْغَـٰشِيَةِ","ru":"Дошел ли до тебя рассказ о Покрывающем (Дне воскресения)?"},{"sura":88,"ayah":2,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وُجُوهٌ يَوْمَئِذٍ خَـٰشِعَةٌ","ru":"Одни лица в тот день будут унижены,"},{"sura":88,"ayah":3,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"عَامِلَةٌ نَّاصِبَةٌ","ru":"изнурены и утомлены."},{"sura":88,"ayah":4,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"تَصْلَىٰ نَارًا حَامِيَةً","ru":"Они будут гореть в Огне жарком."},{"sura":88,"ayah":5,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"تُسْقَىٰ مِنْ عَيْنٍ ءَانِيَةٍ","ru":"Их будут поить из источника кипящего"},{"sura":88,"ayah":6,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍ","ru":"и кормить только ядовитыми колючками,"},{"sura":88,"ayah":7,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"لَّا يُسْمِنُ وَلَا يُغْنِى مِن جُوعٍ","ru":"от которых не поправляются и которые не утоляют голода."},{"sura":88,"ayah":8,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وُجُوهٌ يَوْمَئِذٍ نَّاعِمَةٌ","ru":"Другие же лица в тот день будут радостны."},{"sura":88,"ayah":9,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"لِّسَعْيِهَا رَاضِيَةٌ","ru":"Они будут довольны своими стараниями"},{"sura":88,"ayah":10,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"فِى جَنَّةٍ عَالِيَةٍ","ru":"в Вышних садах."},{"sura":88,"ayah":11,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"لَّا تَسْمَعُ فِيهَا لَـٰغِيَةً","ru":"Они не услышат там словоблудия."},{"sura":88,"ayah":12,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"فِيهَا عَيْنٌ جَارِيَةٌ","ru":"Там есть источник текущий."},{"sura":88,"ayah":13,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"فِيهَا سُرُرٌ مَّرْفُوعَةٌ","ru":"Там воздвигнуты ложа,"},{"sura":88,"ayah":14,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَأَكْوَابٌ مَّوْضُوعَةٌ","ru":"расставлены чаши,"},{"sura":88,"ayah":15,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَنَمَارِقُ مَصْفُوفَةٌ","ru":"разложены подушки,"},{"sura":88,"ayah":16,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَزَرَابِىُّ مَبْثُوثَةٌ","ru":"и разостланы ковры."},{"sura":88,"ayah":17,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"أَفَلَا يَنظُرُونَ إِلَى ٱلْإِبِلِ كَيْفَ خُلِقَتْ","ru":"Неужели они не видят, как созданы верблюды,"},{"sura":88,"ayah":18,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَإِلَى ٱلسَّمَآءِ كَيْفَ رُفِعَتْ","ru":"как вознесено небо,"},{"sura":88,"ayah":19,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَإِلَى ٱلْجِبَالِ كَيْفَ نُصِبَتْ","ru":"как водружены горы,"},{"sura":88,"ayah":20,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"وَإِلَى ٱلْأَرْضِ كَيْفَ سُطِحَتْ","ru":"как распростерта земля?"},{"sura":88,"ayah":21,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"فَذَكِّرْ إِنَّمَآ أَنتَ مُذَكِّرٌ","ru":"Наставляй же, ведь ты являешься наставником,"},{"sura":88,"ayah":22,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"لَّسْتَ عَلَيْهِم بِمُصَيْطِرٍ","ru":"и ты не властен над ними."},{"sura":88,"ayah":23,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"إِلَّا مَن تَوَلَّىٰ وَكَفَرَ","ru":"А тех, кто отвернется и не уверует,"},{"sura":88,"ayah":24,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"فَيُعَذِّبُهُ ٱللَّهُ ٱلْعَذَابَ ٱلْأَكْبَرَ","ru":"Аллах подвергнет величайшим мучениям."},{"sura":88,"ayah":25,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"إِنَّ إِلَيْنَآ إِيَابَهُمْ","ru":"К Нам они вернутся,"},{"sura":88,"ayah":26,"sura_name":"АЛЬ-ГАШИЙА","sura_translit":"Покрывающее","ar":"ثُمَّ إِنَّ عَلَيْنَا حِسَابَهُم","ru":"и затем Мы потребуем у них отчета."},{"sura":89,"ayah":1,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَٱلْفَجْرِ","ru":"Клянусь зарею!"},{"sura":89,"ayah":2,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَلَيَالٍ عَشْرٍ","ru":"Клянусь десятью ночами!"},{"sura":89,"ayah":3,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَٱلشَّفْعِ وَٱلْوَتْرِ","ru":"Клянусь четом и нечетом!"},{"sura":89,"ayah":4,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَٱلَّيْلِ إِذَا يَسْرِ","ru":"Клянусь ночью, когда она проходит!"},{"sura":89,"ayah":5,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"هَلْ فِى ذَٰلِكَ قَسَمٌ لِّذِى حِجْرٍ","ru":"Неужели этих клятв не достаточно для обладающего разумом?"},{"sura":89,"ayah":6,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِعَادٍ","ru":"Неужели ты не видел, как твой Господь поступил с адитами,"},{"sura":89,"ayah":7,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"إِرَمَ ذَاتِ ٱلْعِمَادِ","ru":"народом Ирама, который был подобен колоннам,"},{"sura":89,"ayah":8,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"ٱلَّتِى لَمْ يُخْلَقْ مِثْلُهَا فِى ٱلْبِلَـٰدِ","ru":"подобных которому не было создано на земле?"},{"sura":89,"ayah":9,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَثَمُودَ ٱلَّذِينَ جَابُوا۟ ٱلصَّخْرَ بِٱلْوَادِ","ru":"С самудянами, которые рассекали скалы в лощине?"},{"sura":89,"ayah":10,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَفِرْعَوْنَ ذِى ٱلْأَوْتَادِ","ru":"С Фараоном, владыкой кольев?"},{"sura":89,"ayah":11,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"ٱلَّذِينَ طَغَوْا۟ فِى ٱلْبِلَـٰدِ","ru":"Они преступали границы дозволенного на земле"},{"sura":89,"ayah":12,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"فَأَكْثَرُوا۟ فِيهَا ٱلْفَسَادَ","ru":"и распространяли на ней много нечестия."},{"sura":89,"ayah":13,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ","ru":"Тогда твой Господь пролил на них бич мучений."},{"sura":89,"ayah":14,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"إِنَّ رَبَّكَ لَبِٱلْمِرْصَادِ","ru":"Воистину, твой Господь – в засаде."},{"sura":89,"ayah":15,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"فَأَمَّا ٱلْإِنسَـٰنُ إِذَا مَا ٱبْتَلَىٰهُ رَبُّهُۥ فَأَكْرَمَهُۥ وَنَعَّمَهُۥ فَيَقُولُ رَبِّىٓ أَكْرَمَنِ","ru":"Когда Господь испытывает человека, оказывая ему милость и одаряя его благами, тот говорит: «Господь мой почтил меня!»"},{"sura":89,"ayah":16,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَأَمَّآ إِذَا مَا ٱبْتَلَىٰهُ فَقَدَرَ عَلَيْهِ رِزْقَهُۥ فَيَقُولُ رَبِّىٓ أَهَـٰنَنِ","ru":"Когда же Он испытывает его, ограничивая его в пропитании, тот говорит: «Господь мой унизил меня!»"},{"sura":89,"ayah":17,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"كَلَّا ۖ بَل لَّا تُكْرِمُونَ ٱلْيَتِيمَ","ru":"Вовсе нет! Вы сами не почитаете сироту,"},{"sura":89,"ayah":18,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَلَا تَحَـٰٓضُّونَ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ","ru":"не побуждаете друг друга кормить бедняка,"},{"sura":89,"ayah":19,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَتَأْكُلُونَ ٱلتُّرَاثَ أَكْلًا لَّمًّا","ru":"жадно пожираете наследство"},{"sura":89,"ayah":20,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَتُحِبُّونَ ٱلْمَالَ حُبًّا جَمًّا","ru":"и страстно любите богатство."},{"sura":89,"ayah":21,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"كَلَّآ إِذَا دُكَّتِ ٱلْأَرْضُ دَكًّا دَكًّا","ru":"Но нет! Когда земля превратится в пыль"},{"sura":89,"ayah":22,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَجَآءَ رَبُّكَ وَٱلْمَلَكُ صَفًّا صَفًّا","ru":"и твой Господь придет с ангелами, выстроившимися рядами,"},{"sura":89,"ayah":23,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَجِا۟ىٓءَ يَوْمَئِذٍۭ بِجَهَنَّمَ ۚ يَوْمَئِذٍ يَتَذَكَّرُ ٱلْإِنسَـٰنُ وَأَنَّىٰ لَهُ ٱلذِّكْرَىٰ","ru":"в тот день приведут Геенну, и тогда человек помянет назидание. Но к чему такое поминание?"},{"sura":89,"ayah":24,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"يَقُولُ يَـٰلَيْتَنِى قَدَّمْتُ لِحَيَاتِى","ru":"Он скажет: «Лучше бы я заранее позаботился о своей жизни!»"},{"sura":89,"ayah":25,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"فَيَوْمَئِذٍ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٌ","ru":"В тот день никто не накажет так, как наказывает Он,"},{"sura":89,"ayah":26,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٌ","ru":"и никто не наложит таких оков, какие накладывает Он."},{"sura":89,"ayah":27,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"يَـٰٓأَيَّتُهَا ٱلنَّفْسُ ٱلْمُطْمَئِنَّةُ","ru":"О душа, обретшая покой!"},{"sura":89,"ayah":28,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"ٱرْجِعِىٓ إِلَىٰ رَبِّكِ رَاضِيَةً مَّرْضِيَّةً","ru":"Вернись к своему Господу удовлетворенной и снискавшей довольство!"},{"sura":89,"ayah":29,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"فَٱدْخُلِى فِى عِبَـٰدِى","ru":"Войди в круг Моих рабов!"},{"sura":89,"ayah":30,"sura_name":"АЛЬ-ФАДЖР","sura_translit":"Заря","ar":"وَٱدْخُلِى جَنَّتِى","ru":"Войди в Мой Рай!"},{"sura":90,"ayah":1,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"لَآ أُقْسِمُ بِهَـٰذَا ٱلْبَلَدِ","ru":"Клянусь этим городом (Меккой)!"},{"sura":90,"ayah":2,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَأَنتَ حِلٌّۢ بِهَـٰذَا ٱلْبَلَدِ","ru":"Ты обитаешь в этом городе."},{"sura":90,"ayah":3,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَوَالِدٍ وَمَا وَلَدَ","ru":"Клянусь родителем и тем, кого он породил!"},{"sura":90,"ayah":4,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"لَقَدْ خَلَقْنَا ٱلْإِنسَـٰنَ فِى كَبَدٍ","ru":"Мы создали человека с тяготами."},{"sura":90,"ayah":5,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ","ru":"Неужели он полагает, что никто не справится с ним?"},{"sura":90,"ayah":6,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"يَقُولُ أَهْلَكْتُ مَالًا لُّبَدًا","ru":"Он говорит: «Я погубил богатство несметное!»"},{"sura":90,"ayah":7,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أَيَحْسَبُ أَن لَّمْ يَرَهُۥٓ أَحَدٌ","ru":"Неужели он полагает, что никто не видел его?"},{"sura":90,"ayah":8,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ","ru":"Разве Мы не наделили его двумя глазами,"},{"sura":90,"ayah":9,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَلِسَانًا وَشَفَتَيْنِ","ru":"языком и двумя устами?"},{"sura":90,"ayah":10,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَهَدَيْنَـٰهُ ٱلنَّجْدَيْنِ","ru":"Разве Мы не повели его к двум вершинам?"},{"sura":90,"ayah":11,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"فَلَا ٱقْتَحَمَ ٱلْعَقَبَةَ","ru":"Он не стал преодолевать крутую тропу."},{"sura":90,"ayah":12,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَمَآ أَدْرَىٰكَ مَا ٱلْعَقَبَةُ","ru":"Откуда ты мог знать, что такое крутая тропа?"},{"sura":90,"ayah":13,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"فَكُّ رَقَبَةٍ","ru":"Это – освобождение раба"},{"sura":90,"ayah":14,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أَوْ إِطْعَـٰمٌ فِى يَوْمٍ ذِى مَسْغَبَةٍ","ru":"или кормление в голодный день"},{"sura":90,"ayah":15,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"يَتِيمًا ذَا مَقْرَبَةٍ","ru":"сироту из числа родственников"},{"sura":90,"ayah":16,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أَوْ مِسْكِينًا ذَا مَتْرَبَةٍ","ru":"или приникшего к земле бедняка."},{"sura":90,"ayah":17,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"ثُمَّ كَانَ مِنَ ٱلَّذِينَ ءَامَنُوا۟ وَتَوَاصَوْا۟ بِٱلصَّبْرِ وَتَوَاصَوْا۟ بِٱلْمَرْحَمَةِ","ru":"А после этого надо быть одним из тех, которые уверовали и заповедали друг другу терпение и заповедали друг другу милосердие."},{"sura":90,"ayah":18,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"أُو۟لَـٰٓئِكَ أَصْحَـٰبُ ٱلْمَيْمَنَةِ","ru":"Таковы люди правой стороны."},{"sura":90,"ayah":19,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"وَٱلَّذِينَ كَفَرُوا۟ بِـَٔايَـٰتِنَا هُمْ أَصْحَـٰبُ ٱلْمَشْـَٔمَةِ","ru":"Те же, которые не уверовали в Наши знамения, являются людьми левой стороны,"},{"sura":90,"ayah":20,"sura_name":"АЛЬ-БАЛАД","sura_translit":"Город","ar":"عَلَيْهِمْ نَارٌ مُّؤْصَدَةٌۢ","ru":"над которыми сомкнется огненный свод."},{"sura":91,"ayah":1,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلشَّمْسِ وَضُحَىٰهَا","ru":"Клянусь солнцем и его сиянием!"},{"sura":91,"ayah":2,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلْقَمَرِ إِذَا تَلَىٰهَا","ru":"Клянусь луной, которая следует за ним!"},{"sura":91,"ayah":3,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلنَّهَارِ إِذَا جَلَّىٰهَا","ru":"Клянусь днем, который выявляет его (солнца) сияние!"},{"sura":91,"ayah":4,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلَّيْلِ إِذَا يَغْشَىٰهَا","ru":"Клянусь ночью, которая скрывает его!"},{"sura":91,"ayah":5,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلسَّمَآءِ وَمَا بَنَىٰهَا","ru":"Клянусь небом и Тем, Кто его воздвиг (или тем, как Он воздвиг его)!"},{"sura":91,"ayah":6,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَٱلْأَرْضِ وَمَا طَحَىٰهَا","ru":"Клянусь землей и Тем, Кто ее распростер (или тем, как Он распростер ее)!"},{"sura":91,"ayah":7,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَنَفْسٍ وَمَا سَوَّىٰهَا","ru":"Клянусь душой и Тем, Кто придал ей соразмерный облик (или тем, как Он сделал ее облик соразмерным)"},{"sura":91,"ayah":8,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَىٰهَا","ru":"и внушил ей порочность и богобоязненность!"},{"sura":91,"ayah":9,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"قَدْ أَفْلَحَ مَن زَكَّىٰهَا","ru":"Преуспел тот, кто очистил ее,"},{"sura":91,"ayah":10,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَقَدْ خَابَ مَن دَسَّىٰهَا","ru":"и понес урон тот, кто опорочил ее."},{"sura":91,"ayah":11,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"كَذَّبَتْ ثَمُودُ بِطَغْوَىٰهَآ","ru":"Самудяне сочли лжецом пророка из-за своего беззакония,"},{"sura":91,"ayah":12,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"إِذِ ٱنۢبَعَثَ أَشْقَىٰهَا","ru":"и самый несчастный из них вызвался убить верблюдицу."},{"sura":91,"ayah":13,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"فَقَالَ لَهُمْ رَسُولُ ٱللَّهِ نَاقَةَ ٱللَّهِ وَسُقْيَـٰهَا","ru":"Посланник Аллаха сказал им: «Берегите верблюдицу и питье ее!»"},{"sura":91,"ayah":14,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"فَكَذَّبُوهُ فَعَقَرُوهَا فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم بِذَنۢبِهِمْ فَسَوَّىٰهَا","ru":"Они сочли его лжецом и подрезали ей поджилки, а Господь поразил их за этот грех казнью, которая была одинакова для всех (или сровнял над ними землю)."},{"sura":91,"ayah":15,"sura_name":"АШ-ШАМС","sura_translit":"Солнце","ar":"وَلَا يَخَافُ عُقْبَـٰهَا","ru":"Он не опасался последствий этого."},{"sura":92,"ayah":1,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَٱلَّيْلِ إِذَا يَغْشَىٰ","ru":"Клянусь ночью, которая покрывает землю!"},{"sura":92,"ayah":2,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَٱلنَّهَارِ إِذَا تَجَلَّىٰ","ru":"Клянусь днем, который сияет светом!"},{"sura":92,"ayah":3,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَمَا خَلَقَ ٱلذَّكَرَ وَٱلْأُنثَىٰٓ","ru":"Клянусь Тем, Кто создал мужчину и женщину!"},{"sura":92,"ayah":4,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"إِنَّ سَعْيَكُمْ لَشَتَّىٰ","ru":"Ваши стремления различны."},{"sura":92,"ayah":5,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"فَأَمَّا مَنْ أَعْطَىٰ وَٱتَّقَىٰ","ru":"Тому, кто делал пожертвования и был богобоязнен,"},{"sura":92,"ayah":6,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَصَدَّقَ بِٱلْحُسْنَىٰ","ru":"кто признавал наилучшее,"},{"sura":92,"ayah":7,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"فَسَنُيَسِّرُهُۥ لِلْيُسْرَىٰ","ru":"Мы облегчим путь к легчайшему."},{"sura":92,"ayah":8,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَأَمَّا مَنۢ بَخِلَ وَٱسْتَغْنَىٰ","ru":"А тому, кто был скуп и полагал, что ни в чем не нуждается,"},{"sura":92,"ayah":9,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَكَذَّبَ بِٱلْحُسْنَىٰ","ru":"кто счел ложью наилучшее,"},{"sura":92,"ayah":10,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"فَسَنُيَسِّرُهُۥ لِلْعُسْرَىٰ","ru":"Мы облегчим путь к тягчайшему."},{"sura":92,"ayah":11,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَمَا يُغْنِى عَنْهُ مَالُهُۥٓ إِذَا تَرَدَّىٰٓ","ru":"Не спасет его достояние, когда он падет."},{"sura":92,"ayah":12,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"إِنَّ عَلَيْنَا لَلْهُدَىٰ","ru":"Нам надлежит вести прямым путем."},{"sura":92,"ayah":13,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَإِنَّ لَنَا لَلْـَٔاخِرَةَ وَٱلْأُولَىٰ","ru":"Нам принадлежат Последняя жизнь и жизнь первая."},{"sura":92,"ayah":14,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"فَأَنذَرْتُكُمْ نَارًا تَلَظَّىٰ","ru":"Я предостерег вас от пылающего Огня."},{"sura":92,"ayah":15,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"لَا يَصْلَىٰهَآ إِلَّا ٱلْأَشْقَى","ru":"Войдет в него только самый несчастный,"},{"sura":92,"ayah":16,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"ٱلَّذِى كَذَّبَ وَتَوَلَّىٰ","ru":"который считает истину ложью и отворачивается."},{"sura":92,"ayah":17,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَسَيُجَنَّبُهَا ٱلْأَتْقَى","ru":"Отдален будет от него богобоязненный,"},{"sura":92,"ayah":18,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"ٱلَّذِى يُؤْتِى مَالَهُۥ يَتَزَكَّىٰ","ru":"который раздает свое богатство, очищаясь,"},{"sura":92,"ayah":19,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَمَا لِأَحَدٍ عِندَهُۥ مِن نِّعْمَةٍ تُجْزَىٰٓ","ru":"и всякую милость возмещает сполна"},{"sura":92,"ayah":20,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"إِلَّا ٱبْتِغَآءَ وَجْهِ رَبِّهِ ٱلْأَعْلَىٰ","ru":"только из стремления к Лику своего Всевышнего Господа."},{"sura":92,"ayah":21,"sura_name":"АЛЬ-ЛЕЙЛ","sura_translit":"Ночь","ar":"وَلَسَوْفَ يَرْضَىٰ","ru":"Он непременно будет удовлетворен."},{"sura":93,"ayah":1,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَٱلضُّحَىٰ","ru":"Клянусь утром!"},{"sura":93,"ayah":2,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَٱلَّيْلِ إِذَا سَجَىٰ","ru":"Клянусь ночью, когда она густеет!"},{"sura":93,"ayah":3,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ","ru":"Не покинул тебя твой Господь и не возненавидел."},{"sura":93,"ayah":4,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَلَلْـَٔاخِرَةُ خَيْرٌ لَّكَ مِنَ ٱلْأُولَىٰ","ru":"Воистину, будущее для тебя лучше, чем настоящее."},{"sura":93,"ayah":5,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰٓ","ru":"Господь твой непременно одарит тебя, и ты будешь удовлетворен."},{"sura":93,"ayah":6,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"أَلَمْ يَجِدْكَ يَتِيمًا فَـَٔاوَىٰ","ru":"Разве Он не нашел тебя сиротой и не дал тебе приют?"},{"sura":93,"ayah":7,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَوَجَدَكَ ضَآلًّا فَهَدَىٰ","ru":"Он нашел тебя заблудшим и повел прямым путем?"},{"sura":93,"ayah":8,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَوَجَدَكَ عَآئِلًا فَأَغْنَىٰ","ru":"Он нашел тебя бедным и обогатил?"},{"sura":93,"ayah":9,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"فَأَمَّا ٱلْيَتِيمَ فَلَا تَقْهَرْ","ru":"Посему не притесняй сироту!"},{"sura":93,"ayah":10,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَأَمَّا ٱلسَّآئِلَ فَلَا تَنْهَرْ","ru":"И не гони просящего!"},{"sura":93,"ayah":11,"sura_name":"АД-ДУХА","sura_translit":"Утро","ar":"وَأَمَّا بِنِعْمَةِ رَبِّكَ فَحَدِّثْ","ru":"И возвещай о милости своего Господа."},{"sura":94,"ayah":1,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ","ru":"Разве Мы не раскрыли твою грудь?"},{"sura":94,"ayah":2,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"وَوَضَعْنَا عَنكَ وِزْرَكَ","ru":"и не сняли с тебя ношу,"},{"sura":94,"ayah":3,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"ٱلَّذِىٓ أَنقَضَ ظَهْرَكَ","ru":"которая отягощала твою спину?"},{"sura":94,"ayah":4,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"وَرَفَعْنَا لَكَ ذِكْرَكَ","ru":"Разве Мы не возвеличили твое поминание?"},{"sura":94,"ayah":5,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا","ru":"Воистину, за каждой тягостью наступает облегчение."},{"sura":94,"ayah":6,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا","ru":"За каждой тягостью наступает облегчение."},{"sura":94,"ayah":7,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"فَإِذَا فَرَغْتَ فَٱنصَبْ","ru":"Посему, как только освободишься, будь деятелен"},{"sura":94,"ayah":8,"sura_name":"АЛЬ-ИНШИРАХ","sura_translit":"Раскрытие","ar":"وَإِلَىٰ رَبِّكَ فَٱرْغَب","ru":"и устремись к своему Господу."},{"sura":95,"ayah":1,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"بِّسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ وَٱلتِّينِ وَٱلزَّيْتُونِ","ru":"Клянусь смоковницей и оливой!"},{"sura":95,"ayah":2,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"وَطُورِ سِينِينَ","ru":"Клянусь горой Синаем!"},{"sura":95,"ayah":3,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"وَهَـٰذَا ٱلْبَلَدِ ٱلْأَمِينِ","ru":"Клянусь этим безопасным городом (Меккой)!"},{"sura":95,"ayah":4,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"لَقَدْ خَلَقْنَا ٱلْإِنسَـٰنَ فِىٓ أَحْسَنِ تَقْوِيمٍ","ru":"Мы сотворили человека в прекраснейшем облике."},{"sura":95,"ayah":5,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"ثُمَّ رَدَدْنَـٰهُ أَسْفَلَ سَـٰفِلِينَ","ru":"Потом Мы низвергнем его в нижайшее из низких мест,"},{"sura":95,"ayah":6,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ فَلَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍ","ru":"за исключением тех, которые уверовали и совершали праведные деяния. Им уготована награда неиссякаемая."},{"sura":95,"ayah":7,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"فَمَا يُكَذِّبُكَ بَعْدُ بِٱلدِّينِ","ru":"Что же после этого заставляет тебя считать ложью воздаяние?"},{"sura":95,"ayah":8,"sura_name":"АТ-ТИН","sura_translit":"Смоковница","ar":"أَلَيْسَ ٱللَّهُ بِأَحْكَمِ ٱلْحَـٰكِمِينَ","ru":"Разве Аллах не является Наимудрейшим Судьей?"},{"sura":96,"ayah":1,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"ٱقْرَأْ بِٱسْمِ رَبِّكَ ٱلَّذِى خَلَقَ","ru":"Читай во имя твоего Господа, Который сотворил все сущее."},{"sura":96,"ayah":2,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"خَلَقَ ٱلْإِنسَـٰنَ مِنْ عَلَقٍ","ru":"Он сотворил человека из сгустка крови."},{"sura":96,"ayah":3,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"ٱقْرَأْ وَرَبُّكَ ٱلْأَكْرَمُ","ru":"Читай, ведь твой Господь – Самый великодушный."},{"sura":96,"ayah":4,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"ٱلَّذِى عَلَّمَ بِٱلْقَلَمِ","ru":"Он научил посредством письменной трости –"},{"sura":96,"ayah":5,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"عَلَّمَ ٱلْإِنسَـٰنَ مَا لَمْ يَعْلَمْ","ru":"научил человека тому, чего тот не знал."},{"sura":96,"ayah":6,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"كَلَّآ إِنَّ ٱلْإِنسَـٰنَ لَيَطْغَىٰٓ","ru":"Но нет! Человек преступает границы дозволенного,"},{"sura":96,"ayah":7,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَن رَّءَاهُ ٱسْتَغْنَىٰٓ","ru":"когда ему кажется, что он ни в чем не нуждается."},{"sura":96,"ayah":8,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"إِنَّ إِلَىٰ رَبِّكَ ٱلرُّجْعَىٰٓ","ru":"Но к твоему Господу предстоит возвращение."},{"sura":96,"ayah":9,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَرَءَيْتَ ٱلَّذِى يَنْهَىٰ","ru":"Видел ли ты того, кто мешает"},{"sura":96,"ayah":10,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"عَبْدًا إِذَا صَلَّىٰٓ","ru":"рабу, когда тот молится?"},{"sura":96,"ayah":11,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَرَءَيْتَ إِن كَانَ عَلَى ٱلْهُدَىٰٓ","ru":"Как ты думаешь, а вдруг он был на правом пути"},{"sura":96,"ayah":12,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَوْ أَمَرَ بِٱلتَّقْوَىٰٓ","ru":"или призывал к богобоязненности?"},{"sura":96,"ayah":13,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَرَءَيْتَ إِن كَذَّبَ وَتَوَلَّىٰٓ","ru":"Как ты думаешь, а вдруг он счел ложью истину и отвернулся?"},{"sura":96,"ayah":14,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"أَلَمْ يَعْلَم بِأَنَّ ٱللَّهَ يَرَىٰ","ru":"Неужели он не знал, что Аллах видит его?"},{"sura":96,"ayah":15,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"كَلَّا لَئِن لَّمْ يَنتَهِ لَنَسْفَعًۢا بِٱلنَّاصِيَةِ","ru":"Но нет, если он не перестанет, то Мы схватим его за хохол –"},{"sura":96,"ayah":16,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"نَاصِيَةٍ كَـٰذِبَةٍ خَاطِئَةٍ","ru":"хохол лживый, грешный."},{"sura":96,"ayah":17,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"فَلْيَدْعُ نَادِيَهُۥ","ru":"Пусть он зовет свое сборище."},{"sura":96,"ayah":18,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"سَنَدْعُ ٱلزَّبَانِيَةَ","ru":"Мы же позовем адских стражей!"},{"sura":96,"ayah":19,"sura_name":"АЛЬ-АЛЯК","sura_translit":"Сгусток крови","ar":"كَلَّا لَا تُطِعْهُ وَٱسْجُدْ وَٱقْتَرِب ۩","ru":"Но нет! Не повинуйся ему, а пади ниц и приближайся к Аллаху."},{"sura":97,"ayah":1,"sura_name":"АЛЬ-КАДР","sura_translit":"Предопределение","ar":"بِّسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ إِنَّآ أَنزَلْنَـٰهُ فِى لَيْلَةِ ٱلْقَدْرِ","ru":"Воистину, Мы ниспослали его (Коран) в ночь предопределения (или величия)."},{"sura":97,"ayah":2,"sura_name":"АЛЬ-КАДР","sura_translit":"Предопределение","ar":"وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ","ru":"Откуда ты мог знать, что такое ночь предопределения (или величия)?"},{"sura":97,"ayah":3,"sura_name":"АЛЬ-КАДР","sura_translit":"Предопределение","ar":"لَيْلَةُ ٱلْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ","ru":"Ночь предопределения (или величия) лучше тысячи месяцев."},{"sura":97,"ayah":4,"sura_name":"АЛЬ-КАДР","sura_translit":"Предопределение","ar":"تَنَزَّلُ ٱلْمَلَـٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ","ru":"В эту ночь ангелы и Дух (Джибриль) нисходят с дозволения их Господа по всем Его повелениям."},{"sura":97,"ayah":5,"sura_name":"АЛЬ-КАДР","sura_translit":"Предопределение","ar":"سَلَـٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ","ru":"Она благополучна вплоть до наступления зари."},{"sura":98,"ayah":1,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"لَمْ يَكُنِ ٱلَّذِينَ كَفَرُوا۟ مِنْ أَهْلِ ٱلْكِتَـٰبِ وَٱلْمُشْرِكِينَ مُنفَكِّينَ حَتَّىٰ تَأْتِيَهُمُ ٱلْبَيِّنَةُ","ru":"Неуверовавшие люди Писания и многобожники не расстались с неверием, пока к ним не явилось ясное знамение –"},{"sura":98,"ayah":2,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"رَسُولٌ مِّنَ ٱللَّهِ يَتْلُوا۟ صُحُفًا مُّطَهَّرَةً","ru":"Посланник Аллаха, который читает очищенные свитки."},{"sura":98,"ayah":3,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"فِيهَا كُتُبٌ قَيِّمَةٌ","ru":"В них содержатся правдивые Писания."},{"sura":98,"ayah":4,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"وَمَا تَفَرَّقَ ٱلَّذِينَ أُوتُوا۟ ٱلْكِتَـٰبَ إِلَّا مِنۢ بَعْدِ مَا جَآءَتْهُمُ ٱلْبَيِّنَةُ","ru":"Те, кому было даровано Писание, распались только после того, как к ним явилось ясное знамение."},{"sura":98,"ayah":5,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"وَمَآ أُمِرُوٓا۟ إِلَّا لِيَعْبُدُوا۟ ٱللَّهَ مُخْلِصِينَ لَهُ ٱلدِّينَ حُنَفَآءَ وَيُقِيمُوا۟ ٱلصَّلَوٰةَ وَيُؤْتُوا۟ ٱلزَّكَوٰةَ ۚ وَذَٰلِكَ دِينُ ٱلْقَيِّمَةِ","ru":"А ведь им было велено лишь поклоняться Аллаху, служа ему искренне, как единобожники, совершать намаз и выплачивать закят. Это – правая вера."},{"sura":98,"ayah":6,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"إِنَّ ٱلَّذِينَ كَفَرُوا۟ مِنْ أَهْلِ ٱلْكِتَـٰبِ وَٱلْمُشْرِكِينَ فِى نَارِ جَهَنَّمَ خَـٰلِدِينَ فِيهَآ ۚ أُو۟لَـٰٓئِكَ هُمْ شَرُّ ٱلْبَرِيَّةِ","ru":"Воистину, неуверовавшие люди Писания и многобожники окажутся в огне Геенны и пребудут там вечно. Они являются наихудшими из тварей."},{"sura":98,"ayah":7,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ أُو۟لَـٰٓئِكَ هُمْ خَيْرُ ٱلْبَرِيَّةِ","ru":"Воистину, те, которые уверовали и совершали праведные деяния, являются наилучшими из тварей."},{"sura":98,"ayah":8,"sura_name":"АЛЬ-БЕЙЙИНА","sura_translit":"Ясное знамение","ar":"جَزَآؤُهُمْ عِندَ رَبِّهِمْ جَنَّـٰتُ عَدْنٍ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَـٰرُ خَـٰلِدِينَ فِيهَآ أَبَدًا ۖ رَّضِىَ ٱللَّهُ عَنْهُمْ وَرَضُوا۟ عَنْهُ ۚ ذَٰلِكَ لِمَنْ خَشِىَ رَبَّهُۥ","ru":"Их воздаянием у их Господа будут сады Эдема, в которых текут реки. Они пребудут в них вечно. Аллах доволен ими, и они довольны Им. Это уготовано для тех, кто боится своего Господа."},{"sura":99,"ayah":1,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"إِذَا زُلْزِلَتِ ٱلْأَرْضُ زِلْزَالَهَا","ru":"Когда земля содрогнется от сотрясений,"},{"sura":99,"ayah":2,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"وَأَخْرَجَتِ ٱلْأَرْضُ أَثْقَالَهَا","ru":"когда земля извергнет свою ношу,"},{"sura":99,"ayah":3,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"وَقَالَ ٱلْإِنسَـٰنُ مَا لَهَا","ru":"и человек спросит, что же с нею,"},{"sura":99,"ayah":4,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"يَوْمَئِذٍ تُحَدِّثُ أَخْبَارَهَا","ru":"в тот день она поведает свой рассказ,"},{"sura":99,"ayah":5,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"بِأَنَّ رَبَّكَ أَوْحَىٰ لَهَا","ru":"потому что Господь твой внушит ей это."},{"sura":99,"ayah":6,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"يَوْمَئِذٍ يَصْدُرُ ٱلنَّاسُ أَشْتَاتًا لِّيُرَوْا۟ أَعْمَـٰلَهُمْ","ru":"В тот день люди выйдут толпами, чтобы узреть свои деяния."},{"sura":99,"ayah":7,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُۥ","ru":"Тот, кто сделал добро весом в мельчайшую частицу, увидит его."},{"sura":99,"ayah":8,"sura_name":"АЗ-ЗАЛЗАЛА","sura_translit":"Сотрясение","ar":"وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُۥ","ru":"И тот, кто сделал зло весом в мельчайшую частицу, увидит его."},{"sura":100,"ayah":1,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"وَٱلْعَـٰدِيَـٰتِ ضَبْحًا","ru":"Клянусь скачущими, запыхаясь!"},{"sura":100,"ayah":2,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"فَٱلْمُورِيَـٰتِ قَدْحًا","ru":"Клянусь высекающими искры!"},{"sura":100,"ayah":3,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"فَٱلْمُغِيرَٰتِ صُبْحًا","ru":"Клянусь нападающими на заре,"},{"sura":100,"ayah":4,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"فَأَثَرْنَ بِهِۦ نَقْعًا","ru":"которые оставляют его (врага) в пыли"},{"sura":100,"ayah":5,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"فَوَسَطْنَ بِهِۦ جَمْعًا","ru":"и врываются с ним (со всадником) в гущу."},{"sura":100,"ayah":6,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"إِنَّ ٱلْإِنسَـٰنَ لِرَبِّهِۦ لَكَنُودٌ","ru":"Воистину, человек неблагодарен своему Господу,"},{"sura":100,"ayah":7,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"وَإِنَّهُۥ عَلَىٰ ذَٰلِكَ لَشَهِيدٌ","ru":"и он сам является тому свидетелем."},{"sura":100,"ayah":8,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"وَإِنَّهُۥ لِحُبِّ ٱلْخَيْرِ لَشَدِيدٌ","ru":"Воистину, он страстно любит блага."},{"sura":100,"ayah":9,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"أَفَلَا يَعْلَمُ إِذَا بُعْثِرَ مَا فِى ٱلْقُبُورِ","ru":"Неужели он не знает, что, когда будет опрокинуто то, что в могилах,"},{"sura":100,"ayah":10,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"وَحُصِّلَ مَا فِى ٱلصُّدُورِ","ru":"и когда обнаружится то, что в груди,"},{"sura":100,"ayah":11,"sura_name":"АЛЬ-АДИЙАТ","sura_translit":"Скачущие","ar":"إِنَّ رَبَّهُم بِهِمْ يَوْمَئِذٍ لَّخَبِيرٌۢ","ru":"в тот день Господь их будет осведомлен о них."},{"sura":101,"ayah":1,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"ٱلْقَارِعَةُ","ru":"Великое бедствие (День воскресения)!"},{"sura":101,"ayah":2,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"مَا ٱلْقَارِعَةُ","ru":"Что такое Великое бедствие (День воскресения)?"},{"sura":101,"ayah":3,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"وَمَآ أَدْرَىٰكَ مَا ٱلْقَارِعَةُ","ru":"Откуда ты мог знать, что такое Великое бедствие (День воскресения)?"},{"sura":101,"ayah":4,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"يَوْمَ يَكُونُ ٱلنَّاسُ كَٱلْفَرَاشِ ٱلْمَبْثُوثِ","ru":"В тот день люди будут подобны рассеянным мотылькам,"},{"sura":101,"ayah":5,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"وَتَكُونُ ٱلْجِبَالُ كَٱلْعِهْنِ ٱلْمَنفُوشِ","ru":"а горы будут подобны расчесанной шерсти."},{"sura":101,"ayah":6,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"فَأَمَّا مَن ثَقُلَتْ مَوَٰزِينُهُۥ","ru":"Тогда тот, чья чаша Весов окажется тяжелой,"},{"sura":101,"ayah":7,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"فَهُوَ فِى عِيشَةٍ رَّاضِيَةٍ","ru":"обретет приятную жизнь."},{"sura":101,"ayah":8,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"وَأَمَّا مَنْ خَفَّتْ مَوَٰزِينُهُۥ","ru":"Тому же, чья чаша Весов окажется легкой,"},{"sura":101,"ayah":9,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"فَأُمُّهُۥ هَاوِيَةٌ","ru":"пристанищем будет Пропасть."},{"sura":101,"ayah":10,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"وَمَآ أَدْرَىٰكَ مَا هِيَهْ","ru":"Откуда ты мог знать, что это такое?"},{"sura":101,"ayah":11,"sura_name":"АЛЬ-КАРИА","sura_translit":"Великое бедствие","ar":"نَارٌ حَامِيَةٌۢ","ru":"Это – жаркий Огонь!"},{"sura":102,"ayah":1,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"أَلْهَىٰكُمُ ٱلتَّكَاثُرُ","ru":"Страсть к приумножению увлекает вас"},{"sura":102,"ayah":2,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"حَتَّىٰ زُرْتُمُ ٱلْمَقَابِرَ","ru":"пока вы не посетите могилы."},{"sura":102,"ayah":3,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"كَلَّا سَوْفَ تَعْلَمُونَ","ru":"Но нет! Скоро вы узнаете!"},{"sura":102,"ayah":4,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ","ru":"Еще раз нет! Скоро вы узнаете!"},{"sura":102,"ayah":5,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"كَلَّا لَوْ تَعْلَمُونَ عِلْمَ ٱلْيَقِينِ","ru":"О нет! Если бы вы только обладали знанием с полной убежденностью!"},{"sura":102,"ayah":6,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"لَتَرَوُنَّ ٱلْجَحِيمَ","ru":"Вы непременно увидите Ад."},{"sura":102,"ayah":7,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"ثُمَّ لَتَرَوُنَّهَا عَيْنَ ٱلْيَقِينِ","ru":"Вы увидите его своими глазами доподлинно."},{"sura":102,"ayah":8,"sura_name":"АТ-ТАКАСУР","sura_translit":"Страсть к приумножению","ar":"ثُمَّ لَتُسْـَٔلُنَّ يَوْمَئِذٍ عَنِ ٱلنَّعِيمِ","ru":"В тот день вы будете спрошены о благах."},{"sura":103,"ayah":1,"sura_name":"АЛЬ-АСР","sura_translit":"Предвечернее время","ar":"وَٱلْعَصْرِ","ru":"Клянусь предвечерним временем,"},{"sura":103,"ayah":2,"sura_name":"АЛЬ-АСР","sura_translit":"Предвечернее время","ar":"إِنَّ ٱلْإِنسَـٰنَ لَفِى خُسْرٍ","ru":"что люди несут убытки,"},{"sura":103,"ayah":3,"sura_name":"АЛЬ-АСР","sura_translit":"Предвечернее время","ar":"إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّـٰلِحَـٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ","ru":"кроме тех, которые уверовали, совершали праведные деяния, заповедали друг другу истину и заповедали друг другу терпение!"},{"sura":104,"ayah":1,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ","ru":"Горе всякому хулителю и обидчику,"},{"sura":104,"ayah":2,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"ٱلَّذِى جَمَعَ مَالًا وَعَدَّدَهُۥ","ru":"который копит состояние и подсчитывает его,"},{"sura":104,"ayah":3,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"يَحْسَبُ أَنَّ مَالَهُۥٓ أَخْلَدَهُۥ","ru":"думая, что богатство увековечит его."},{"sura":104,"ayah":4,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"كَلَّا ۖ لَيُنۢبَذَنَّ فِى ٱلْحُطَمَةِ","ru":"О нет! Он будет ввергнут в Огонь сокрушающий."},{"sura":104,"ayah":5,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"وَمَآ أَدْرَىٰكَ مَا ٱلْحُطَمَةُ","ru":"Откуда ты мог знать, что такое Огонь сокрушающий?"},{"sura":104,"ayah":6,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"نَارُ ٱللَّهِ ٱلْمُوقَدَةُ","ru":"Это – разожженный Огонь Аллаха,"},{"sura":104,"ayah":7,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"ٱلَّتِى تَطَّلِعُ عَلَى ٱلْأَفْـِٔدَةِ","ru":"который вздымается над сердцами."},{"sura":104,"ayah":8,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"إِنَّهَا عَلَيْهِم مُّؤْصَدَةٌ","ru":"Он сомкнется над ними"},{"sura":104,"ayah":9,"sura_name":"АЛЬ-ХУМАЗА","sura_translit":"Хулитель","ar":"فِى عَمَدٍ مُّمَدَّدَةٍۭ","ru":"высокими столбами."},{"sura":105,"ayah":1,"sura_name":"АЛЬ-ФИЛЬ","sura_translit":"Слон","ar":"أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَـٰبِ ٱلْفِيلِ","ru":"Разве ты не видел, что сделал твой Господь с владельцами слона?"},{"sura":105,"ayah":2,"sura_name":"АЛЬ-ФИЛЬ","sura_translit":"Слон","ar":"أَلَمْ يَجْعَلْ كَيْدَهُمْ فِى تَضْلِيلٍ","ru":"Разве Он не запутал их козни"},{"sura":105,"ayah":3,"sura_name":"АЛЬ-ФИЛЬ","sura_translit":"Слон","ar":"وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ","ru":"и не наслал на них птиц стаями?"},{"sura":105,"ayah":4,"sura_name":"АЛЬ-ФИЛЬ","sura_translit":"Слон","ar":"تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ","ru":"Они бросали в них каменья из обожженной глины"},{"sura":105,"ayah":5,"sura_name":"АЛЬ-ФИЛЬ","sura_translit":"Слон","ar":"فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍۭ","ru":"и превратили их в подобие изъеденных иссохших злаковых листьев."},{"sura":106,"ayah":1,"sura_name":"КУРЕЙШ","sura_translit":"Курейшиты","ar":"لِإِيلَـٰفِ قُرَيْشٍ","ru":"Ради единения курейшитов,"},{"sura":106,"ayah":2,"sura_name":"КУРЕЙШ","sura_translit":"Курейшиты","ar":"إِۦلَـٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ","ru":"единения их во время зимних и летних поездок."},{"sura":106,"ayah":3,"sura_name":"КУРЕЙШ","sura_translit":"Курейшиты","ar":"فَلْيَعْبُدُوا۟ رَبَّ هَـٰذَا ٱلْبَيْتِ","ru":"Пусть же они поклоняются Господу этого Дома (Каабы),"},{"sura":106,"ayah":4,"sura_name":"КУРЕЙШ","sura_translit":"Курейшиты","ar":"ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍ وَءَامَنَهُم مِّنْ خَوْفٍۭ","ru":"Который накормил их после голода и избавил их от страха."},{"sura":107,"ayah":1,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ","ru":"Видел ли ты того, кто считает ложью воздаяние?"},{"sura":107,"ayah":2,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"فَذَٰلِكَ ٱلَّذِى يَدُعُّ ٱلْيَتِيمَ","ru":"Это – тот, кто гонит сироту"},{"sura":107,"ayah":3,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ","ru":"и не побуждает накормить бедняка."},{"sura":107,"ayah":4,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"فَوَيْلٌ لِّلْمُصَلِّينَ","ru":"Горе молящимся,"},{"sura":107,"ayah":5,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"ٱلَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ","ru":"которые небрежны к своим намазам,"},{"sura":107,"ayah":6,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"ٱلَّذِينَ هُمْ يُرَآءُونَ","ru":"которые лицемерят"},{"sura":107,"ayah":7,"sura_name":"АЛЬ-МАУН","sura_translit":"Мелочь","ar":"وَيَمْنَعُونَ ٱلْمَاعُونَ","ru":"и отказывают даже в мелочи!"},{"sura":108,"ayah":1,"sura_name":"АЛЬ-КАУСАР","sura_translit":"Изобилие","ar":"إِنَّآ أَعْطَيْنَـٰكَ ٱلْكَوْثَرَ","ru":"Мы даровали тебе Изобилие (реку в Раю, которая называется аль-Каусар)."},{"sura":108,"ayah":2,"sura_name":"АЛЬ-КАУСАР","sura_translit":"Изобилие","ar":"فَصَلِّ لِرَبِّكَ وَٱنْحَرْ","ru":"Посему совершай намаз ради своего Господа и закалывай жертву."},{"sura":108,"ayah":3,"sura_name":"АЛЬ-КАУСАР","sura_translit":"Изобилие","ar":"إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ","ru":"Воистину, твой ненавистник сам окажется бездетным."},{"sura":109,"ayah":1,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"قُلْ يَـٰٓأَيُّهَا ٱلْكَـٰفِرُونَ","ru":"Скажи: «О неверующие!"},{"sura":109,"ayah":2,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"لَآ أَعْبُدُ مَا تَعْبُدُونَ","ru":"Я не поклоняюсь тому, чему поклоняетесь вы,"},{"sura":109,"ayah":3,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"وَلَآ أَنتُمْ عَـٰبِدُونَ مَآ أَعْبُدُ","ru":"а вы не поклоняетесь Тому, Кому поклоняюсь я."},{"sura":109,"ayah":4,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"وَلَآ أَنَا۠ عَابِدٌ مَّا عَبَدتُّمْ","ru":"Я не поклоняюсь так, как поклоняетесь вы (или тому, чему поклоняетесь вы),"},{"sura":109,"ayah":5,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"وَلَآ أَنتُمْ عَـٰبِدُونَ مَآ أَعْبُدُ","ru":"а вы не поклоняетесь так, как поклоняюсь я (или Тому, Кому поклоняюсь я)."},{"sura":109,"ayah":6,"sura_name":"АЛЬ-КАФИРУН","sura_translit":"Неверующие","ar":"لَكُمْ دِينُكُمْ وَلِىَ دِينِ","ru":"Вы исповедуете свою религию, а я исповедую свою!»"},{"sura":110,"ayah":1,"sura_name":"АН-НАСР","sura_translit":"Помощь","ar":"إِذَا جَآءَ نَصْرُ ٱللَّهِ وَٱلْفَتْحُ","ru":"Когда придет помощь Аллаха и настанет победа,"},{"sura":110,"ayah":2,"sura_name":"АН-НАСР","sura_translit":"Помощь","ar":"وَرَأَيْتَ ٱلنَّاسَ يَدْخُلُونَ فِى دِينِ ٱللَّهِ أَفْوَاجًا","ru":"когда ты увидишь, как люди толпами обращаются в религию Аллаха,"},{"sura":110,"ayah":3,"sura_name":"АН-НАСР","sura_translit":"Помощь","ar":"فَسَبِّحْ بِحَمْدِ رَبِّكَ وَٱسْتَغْفِرْهُ ۚ إِنَّهُۥ كَانَ تَوَّابًۢا","ru":"восславь же хвалой Господа своего и попроси у Него прощения. Воистину, Он – Принимающий покаяния."},{"sura":111,"ayah":1,"sura_name":"АЛЬ-МАСАД","sura_translit":"Пальмовые волокна","ar":"تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ","ru":"Да отсохнут руки Абу Лахаба, и сам он уже сгинул."},{"sura":111,"ayah":2,"sura_name":"АЛЬ-МАСАД","sura_translit":"Пальмовые волокна","ar":"مَآ أَغْنَىٰ عَنْهُ مَالُهُۥ وَمَا كَسَبَ","ru":"Не помогло ему богатство, и он ничего не приобрел."},{"sura":111,"ayah":3,"sura_name":"АЛЬ-МАСАД","sura_translit":"Пальмовые волокна","ar":"سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ","ru":"Он попадет в пламенный Огонь."},{"sura":111,"ayah":4,"sura_name":"АЛЬ-МАСАД","sura_translit":"Пальмовые волокна","ar":"وَٱمْرَأَتُهُۥ حَمَّالَةَ ٱلْحَطَبِ","ru":"Жена его будет носить дрова,"},{"sura":111,"ayah":5,"sura_name":"АЛЬ-МАСАД","sura_translit":"Пальмовые волокна","ar":"فِى جِيدِهَا حَبْلٌ مِّن مَّسَدٍۭ","ru":"а на шее у нее будет плетеная веревка из пальмовых волокон."},{"sura":112,"ayah":1,"sura_name":"АЛЬ-ИХЛАС","sura_translit":"Чистое вероисповедание","ar":"قُلْ هُوَ ٱللَّهُ أَحَدٌ","ru":"Скажи: «Он – Аллах Единый,"},{"sura":112,"ayah":2,"sura_name":"АЛЬ-ИХЛАС","sura_translit":"Чистое вероисповедание","ar":"ٱللَّهُ ٱلصَّمَدُ","ru":"Аллах Самодостаточный."},{"sura":112,"ayah":3,"sura_name":"АЛЬ-ИХЛАС","sura_translit":"Чистое вероисповедание","ar":"لَمْ يَلِدْ وَلَمْ يُولَدْ","ru":"Он не родил и не был рожден,"},{"sura":112,"ayah":4,"sura_name":"АЛЬ-ИХЛАС","sura_translit":"Чистое вероисповедание","ar":"وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ","ru":"и нет никого, равного Ему»."},{"sura":113,"ayah":1,"sura_name":"АЛЬ-ФАЛЯК","sura_translit":"Рассвет","ar":"قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ","ru":"Скажи: «Прибегаю к защите Господа рассвета"},{"sura":113,"ayah":2,"sura_name":"АЛЬ-ФАЛЯК","sura_translit":"Рассвет","ar":"مِن شَرِّ مَا خَلَقَ","ru":"от зла того, что Он сотворил,"},{"sura":113,"ayah":3,"sura_name":"АЛЬ-ФАЛЯК","sura_translit":"Рассвет","ar":"وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ","ru":"от зла мрака, когда он наступает,"},{"sura":113,"ayah":4,"sura_name":"АЛЬ-ФАЛЯК","sura_translit":"Рассвет","ar":"وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ","ru":"от зла колдуний, дующих на узлы,"},{"sura":113,"ayah":5,"sura_name":"АЛЬ-ФАЛЯК","sura_translit":"Рассвет","ar":"وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ","ru":"от зла завистника, когда он завидует»."},{"sura":114,"ayah":1,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ","ru":"Скажи: «Прибегаю к защите Господа людей,"},{"sura":114,"ayah":2,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"مَلِكِ ٱلنَّاسِ","ru":"Царя людей,"},{"sura":114,"ayah":3,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"إِلَـٰهِ ٱلنَّاسِ","ru":"Бога людей,"},{"sura":114,"ayah":4,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ","ru":"от зла искусителя исчезающего при поминании Аллаха,"},{"sura":114,"ayah":5,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ","ru":"который наущает в груди людей,"},{"sura":114,"ayah":6,"sura_name":"АН-НАС","sura_translit":"Люди","ar":"مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ","ru":"от джиннов и людей»."}],"suras":[{"num":78,"name":"АН-НАБА","translit":"Весть","count":40},{"num":79,"name":"АН-НАЗИАТ","translit":"Исторгающие","count":46},{"num":80,"name":"АБАСА","translit":"Нахмурился","count":42},{"num":81,"name":"АТ-ТАКВИР","translit":"Скручивание","count":29},{"num":82,"name":"АЛЬ-ИНФИТАР","translit":"Раскалывание","count":19},{"num":83,"name":"АЛЬ-МУТАФФИФИН","translit":"Обвешивающие","count":36},{"num":84,"name":"АЛЬ-ИНШИКАК","translit":"Развержение","count":25},{"num":85,"name":"АЛЬ-БУРУДЖ","translit":"Созвездия Зодиака","count":22},{"num":86,"name":"АТ-ТАРИК","translit":"Ночной путник","count":17},{"num":87,"name":"АЛЬ-АЛЯ","translit":"Всевышний","count":19},{"num":88,"name":"АЛЬ-ГАШИЙА","translit":"Покрывающее","count":26},{"num":89,"name":"АЛЬ-ФАДЖР","translit":"Заря","count":30},{"num":90,"name":"АЛЬ-БАЛАД","translit":"Город","count":20},{"num":91,"name":"АШ-ШАМС","translit":"Солнце","count":15},{"num":92,"name":"АЛЬ-ЛЕЙЛ","translit":"Ночь","count":21},{"num":93,"name":"АД-ДУХА","translit":"Утро","count":11},{"num":94,"name":"АЛЬ-ИНШИРАХ","translit":"Раскрытие","count":8},{"num":95,"name":"АТ-ТИН","translit":"Смоковница","count":8},{"num":96,"name":"АЛЬ-АЛЯК","translit":"Сгусток крови","count":19},{"num":97,"name":"АЛЬ-КАДР","translit":"Предопределение","count":5},{"num":98,"name":"АЛЬ-БЕЙЙИНА","translit":"Ясное знамение","count":8},{"num":99,"name":"АЗ-ЗАЛЗАЛА","translit":"Сотрясение","count":8},{"num":100,"name":"АЛЬ-АДИЙАТ","translit":"Скачущие","count":11},{"num":101,"name":"АЛЬ-КАРИА","translit":"Великое бедствие","count":11},{"num":102,"name":"АТ-ТАКАСУР","translit":"Страсть к приумножению","count":8},{"num":103,"name":"АЛЬ-АСР","translit":"Предвечернее время","count":3},{"num":104,"name":"АЛЬ-ХУМАЗА","translit":"Хулитель","count":9},{"num":105,"name":"АЛЬ-ФИЛЬ","translit":"Слон","count":5},{"num":106,"name":"КУРЕЙШ","translit":"Курейшиты","count":4},{"num":107,"name":"АЛЬ-МАУН","translit":"Мелочь","count":7},{"num":108,"name":"АЛЬ-КАУСАР","translit":"Изобилие","count":3},{"num":109,"name":"АЛЬ-КАФИРУН","translit":"Неверующие","count":6},{"num":110,"name":"АН-НАСР","translit":"Помощь","count":3},{"num":111,"name":"АЛЬ-МАСАД","translit":"Пальмовые волокна","count":5},{"num":112,"name":"АЛЬ-ИХЛАС","translit":"Чистое вероисповедание","count":4},{"num":113,"name":"АЛЬ-ФАЛЯК","translit":"Рассвет","count":5},{"num":114,"name":"АН-НАС","translit":"Люди","count":6}]};
+
+const state = {
+  selectedSuras: new Set(),
+  shuffle: false,
+  hideMeta: false,
+  mode: 'ar-to-ru',
+  speed: 1,
+  queue: [],
+  idx: 0,
+  answers: {},
+  reviewFilter: 'wrong',
+};
+
+const $ = id => document.getElementById(id);
+const audioPlayer = $('audioPlayer');
+
+const surasGrid = $('surasGrid');
+DATA.suras.forEach(s => {
+  const chip = document.createElement('label');
+  chip.className = 'sura-chip';
+  chip.innerHTML = `
+    <input type="checkbox" data-sura="${s.num}">
+    <span class="sura-num">${s.num}</span>
+    <span class="sura-name">${s.name}</span>
+  `;
+  surasGrid.appendChild(chip);
+  chip.querySelector('input').addEventListener('change', e => {
+    if (e.target.checked) state.selectedSuras.add(s.num);
+    else state.selectedSuras.delete(s.num);
+    updateSelectedCount();
+    updatePresetActive();
+  });
+});
+
+document.querySelectorAll('.mode-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    state.mode = card.dataset.mode;
+  });
+});
+
+function applyPreset(preset) {
+  state.selectedSuras.clear();
+  if (preset === 'all') {
+    DATA.suras.forEach(s => state.selectedSuras.add(s.num));
+  } else if (preset === 'before-ala') {
+    DATA.suras.filter(s => s.num >= 78 && s.num <= 86).forEach(s => state.selectedSuras.add(s.num));
+  } else if (preset === 'ala-to-zalzala') {
+    DATA.suras.filter(s => s.num >= 87 && s.num <= 98).forEach(s => state.selectedSuras.add(s.num));
+  } else if (preset === 'last-suras') {
+    DATA.suras.filter(s => s.num >= 99 && s.num <= 114).forEach(s => state.selectedSuras.add(s.num));
+  }
+  document.querySelectorAll('#surasGrid input').forEach(inp => {
+    inp.checked = state.selectedSuras.has(+inp.dataset.sura);
+  });
+  updateSelectedCount();
+  updatePresetActive(preset);
+}
+
+document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+  btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+});
+
+function updatePresetActive(preset) {
+  document.querySelectorAll('.preset-btn[data-preset]').forEach(b => {
+    b.classList.toggle('active', preset && b.dataset.preset === preset);
+  });
+}
+
+function updateSelectedCount() {
+  const count = DATA.ayahs.filter(a => state.selectedSuras.has(a.sura)).length;
+  $('selectedCount').textContent = count;
+  $('startBtn').disabled = count === 0;
+}
+
+$('optShuffle').addEventListener('change', e => state.shuffle = e.target.checked);
+$('optHideMeta').addEventListener('change', e => state.hideMeta = e.target.checked);
+
+$('startBtn').addEventListener('click', () => {
+  let queue = DATA.ayahs.filter(a => state.selectedSuras.has(a.sura));
+  if (state.shuffle) queue = shuffle(queue);
+  startQuiz(queue);
+});
+
+function startQuiz(queue) {
+  state.queue = queue;
+  state.idx = 0;
+  state.answers = {};
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name !== 'quiz') stopAudio();
+}
+
+function ayahKey(a) { return `${a.sura}:${a.ayah}`; }
+
+function audioUrls(a) {
+  const s = String(a.sura).padStart(3, '0');
+  const ay = String(a.ayah).padStart(3, '0');
+  // Несколько источников на случай если основной не загружается
+  return [
+    `https://everyayah.com/data/Hudhaify_128kbps/${s}${ay}.mp3`,
+    `https://www.everyayah.com/data/Hudhaify_128kbps/${s}${ay}.mp3`,
+    `https://cdn.islamic.network/quran/audio/128/ar.hudhaify/${(a.sura - 1) * 1000 + 0}.mp3` // fallback (другой формат, может не подойти)
+  ];
+}
+
+function renderQuestion() {
+  const a = state.queue[state.idx];
+  $('qCurrent').textContent = state.idx + 1;
+  $('qTotal').textContent = state.queue.length;
+
+  const score = computeScore();
+  $('qScore').textContent = formatScore(score.points);
+  const pct = state.queue.length ? Math.round(state.idx / state.queue.length * 100) : 0;
+  $('qPct').textContent = pct;
+  $('progressFill').style.width = pct + '%';
+
+  if (state.hideMeta) {
+    $('ayahMetaLeft').style.visibility = 'hidden';
+    $('ayahMetaRight').style.visibility = 'hidden';
+  } else {
+    $('ayahMetaLeft').style.visibility = '';
+    $('ayahMetaRight').style.visibility = '';
+    $('qSura').textContent = a.sura;
+    $('qAyah').textContent = a.ayah;
+    $('ayahMetaRight').textContent = `${a.sura_name} · ${a.sura_translit}`;
+  }
+
+  if (state.mode === 'ar-to-ru') {
+    $('qArabic').style.display = 'block';
+    $('qRussian').style.display = 'none';
+    $('qArabic').textContent = a.ar;
+    $('questionText').textContent = 'Знаете ли вы перевод этого аята?';
+    $('hintBtn').textContent = 'Показать подсказку (перевод)';
+    $('hintContent').textContent = a.ru;
+    $('hintContent').classList.remove('arabic-hint');
+  } else {
+    $('qArabic').style.display = 'none';
+    $('qRussian').style.display = 'block';
+    $('qRussian').textContent = a.ru;
+    $('questionText').textContent = 'Знаете ли вы арабский текст этого аята?';
+    $('hintBtn').textContent = 'Показать подсказку (арабский)';
+    $('hintContent').textContent = a.ar;
+    $('hintContent').classList.add('arabic-hint');
+  }
+
+  $('hintContent').classList.remove('visible');
+
+  stopAudio();
+  state.audioCandidates = audioUrls(a);
+  state.audioCandidateIdx = 0;
+  audioPlayer.src = state.audioCandidates[0];
+  audioPlayer.playbackRate = state.speed;
+  $('audioStatus').textContent = 'Готово';
+
+  document.querySelectorAll('.answer-btn').forEach(b => {
+    b.classList.remove('flash-yes', 'flash-partial', 'flash-no');
+  });
+  const prev = state.answers[ayahKey(a)];
+  if (prev) {
+    const btn = document.querySelector(`.answer-btn[data-answer="${prev}"]`);
+    if (btn) btn.classList.add('flash-' + prev);
+  }
+
+  $('prevBtn').disabled = state.idx === 0;
+}
+
+$('hintBtn').addEventListener('click', () => {
+  const c = $('hintContent');
+  c.classList.toggle('visible');
+  const visible = c.classList.contains('visible');
+  if (state.mode === 'ar-to-ru') {
+    $('hintBtn').textContent = visible ? 'Скрыть подсказку' : 'Показать подсказку (перевод)';
+  } else {
+    $('hintBtn').textContent = visible ? 'Скрыть подсказку' : 'Показать подсказку (арабский)';
+  }
+});
+
+function playAudio() {
+  audioPlayer.playbackRate = state.speed;
+  state.audioWasPlaying = true;
+  audioPlayer.play().then(() => {
+    $('audioPlay').classList.add('playing');
+    $('audioPlay').textContent = '❚❚';
+    $('audioStatus').textContent = 'Играет...';
+  }).catch(err => {
+    $('audioStatus').textContent = 'Не удалось воспроизвести';
+    $('audioPlay').classList.remove('playing');
+    $('audioPlay').textContent = '▶';
+    console.error('Audio play error:', err);
+  });
+}
+
+function pauseAudio() {
+  audioPlayer.pause();
+  state.audioWasPlaying = false;
+  $('audioPlay').classList.remove('playing');
+  $('audioPlay').textContent = '▶';
+  $('audioStatus').textContent = 'Пауза';
+}
+
+function stopAudio() {
+  audioPlayer.pause();
+  audioPlayer.currentTime = 0;
+  state.audioWasPlaying = false;
+  $('audioPlay').classList.remove('playing');
+  $('audioPlay').textContent = '▶';
+  $('audioStatus').textContent = 'Готово';
+}
+
+$('audioPlay').addEventListener('click', () => {
+  if (audioPlayer.paused) playAudio();
+  else pauseAudio();
+});
+
+$('audioReplay').addEventListener('click', () => {
+  audioPlayer.currentTime = 0;
+  playAudio();
+});
+
+audioPlayer.addEventListener('ended', () => {
+  $('audioPlay').classList.remove('playing');
+  $('audioPlay').textContent = '▶';
+  $('audioStatus').textContent = 'Завершено';
+});
+
+audioPlayer.addEventListener('loadstart', () => {
+  $('audioStatus').textContent = 'Загрузка...';
+});
+
+audioPlayer.addEventListener('canplay', () => {
+  if (audioPlayer.paused) $('audioStatus').textContent = 'Готово';
+});
+
+audioPlayer.addEventListener('error', () => {
+  // Пробуем следующий источник
+  if (state.audioCandidates && state.audioCandidateIdx < state.audioCandidates.length - 1) {
+    state.audioCandidateIdx++;
+    const nextUrl = state.audioCandidates[state.audioCandidateIdx];
+    console.log('Пробую следующий источник:', nextUrl);
+    audioPlayer.src = nextUrl;
+    audioPlayer.load();
+    if (state.audioWasPlaying) {
+      audioPlayer.play().catch(e => console.error('Не удалось воспроизвести:', e));
+    }
+  } else {
+    $('audioStatus').textContent = 'Аудио недоступно';
+    $('audioPlay').classList.remove('playing');
+    $('audioPlay').textContent = '▶';
+  }
+});
+
+document.querySelectorAll('.speed-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.speed = parseFloat(btn.dataset.speed);
+    audioPlayer.playbackRate = state.speed;
+  });
+});
+
+document.querySelectorAll('.answer-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const answer = btn.dataset.answer;
+    const a = state.queue[state.idx];
+    state.answers[ayahKey(a)] = answer;
+
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      b.classList.remove('flash-yes', 'flash-partial', 'flash-no');
+    });
+    btn.classList.add('flash-' + answer);
+
+    setTimeout(() => {
+      if (state.idx + 1 < state.queue.length) {
+        state.idx++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }, 380);
+  });
+});
+
+$('prevBtn').addEventListener('click', () => {
+  if (state.idx > 0) { state.idx--; renderQuestion(); }
+});
+
+$('exitBtn').addEventListener('click', () => {
+  if (confirm('Выйти из теста? Текущие ответы сохранятся, и вы увидите результат.')) {
+    showResults();
+  }
+});
+
+function computeScore() {
+  let yes = 0, partial = 0, no = 0, points = 0;
+  state.queue.forEach(a => {
+    const ans = state.answers[ayahKey(a)];
+    if (ans === 'yes') { yes++; points += 1; }
+    else if (ans === 'partial') { partial++; points += 0.5; }
+    else if (ans === 'no') { no++; }
+  });
+  return { yes, partial, no, points, total: state.queue.length };
+}
+
+function formatScore(p) {
+  return Number.isInteger(p) ? p.toString() : p.toFixed(1);
+}
+
+function showResults() {
+  const s = computeScore();
+  const pct = s.total ? Math.round(s.points / s.total * 100) : 0;
+  $('rYes').textContent = s.yes;
+  $('rPartial').textContent = s.partial;
+  $('rNo').textContent = s.no;
+  $('rPct').textContent = pct;
+  $('rScore').textContent = formatScore(s.points);
+  $('rMax').textContent = s.total;
+
+  const circumference = 2 * Math.PI * 68;
+  const offset = circumference * (1 - pct / 100);
+  const fill = $('scoreFill');
+  fill.style.strokeDashoffset = circumference;
+  setTimeout(() => { fill.style.strokeDashoffset = offset; }, 100);
+
+  showScreen('results');
+  const wrongCount = s.no + s.partial;
+  $('retryWrongBtn').disabled = wrongCount === 0;
+}
+
+$('reviewBtn').addEventListener('click', () => {
+  state.reviewFilter = 'wrong';
+  document.querySelectorAll('#reviewFilters .preset-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === 'wrong');
+  });
+  renderReview();
+  showScreen('review');
+});
+
+$('reviewBack').addEventListener('click', () => showScreen('results'));
+
+$('retryWrongBtn').addEventListener('click', () => {
+  const wrong = state.queue.filter(a => {
+    const ans = state.answers[ayahKey(a)];
+    return ans === 'no' || ans === 'partial';
+  });
+  if (wrong.length === 0) return;
+  startQuiz(state.shuffle ? shuffle(wrong) : wrong);
+});
+
+$('restartBtn').addEventListener('click', () => showScreen('setup'));
+
+document.querySelectorAll('#reviewFilters .preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#reviewFilters .preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.reviewFilter = btn.dataset.filter;
+    renderReview();
+  });
+});
+
+function renderReview() {
+  const list = $('reviewList');
+  list.innerHTML = '';
+  const items = state.queue.filter(a => {
+    const ans = state.answers[ayahKey(a)] || 'no';
+    if (state.reviewFilter === 'all') return true;
+    if (state.reviewFilter === 'wrong') return ans === 'no' || ans === 'partial';
+    return ans === state.reviewFilter;
+  });
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty-state">Нет аятов в этой категории.</div>';
+    return;
+  }
+
+  const labels = { yes: 'Знаю', partial: 'Частично', no: 'Не знаю' };
+
+  items.forEach(a => {
+    const ans = state.answers[ayahKey(a)] || 'no';
+    const div = document.createElement('div');
+    div.className = 'review-item ' + ans;
+    div.innerHTML = `
+      <div class="review-header">
+        <span>Сура ${a.sura} (${a.sura_name}) · аят ${a.ayah}</span>
+        <span class="review-badge ${ans}">${labels[ans]}</span>
+      </div>
+      <div class="review-arabic"></div>
+      <div class="review-russian"></div>
+    `;
+    div.querySelector('.review-arabic').textContent = a.ar;
+    div.querySelector('.review-russian').textContent = a.ru;
+    list.appendChild(div);
+  });
+}
+
+applyPreset('all');
+</script>
+
+</body>
+</html>
